@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ターンメソッド - 英語発話トレーニング</title>
+<style>
+/* ========================================
+   ターンメソッド - CSS
+   デザイン方針: 温かみのある教育系UI
+   モバイルファースト・大きめボタン
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Outfit:wght@400;500;600;700&display=swap');
+
+:root {
+–bg: #FFF8F0;
+–bg-card: #FFFFFF;
+–bg-card-alt: #FFF3E6;
+–text: #2D1B0E;
+–text-sub: #7A6555;
+–accent: #E8652B;
+–accent-light: #FF8F5C;
+–accent-bg: #FFF0E8;
+–correct: #2EA44F;
+–correct-bg: #E6F9ED;
+–close: #D4A017;
+–close-bg: #FFF8E1;
+–wrong: #D73A49;
+–wrong-bg: #FFEEF0;
+–border: #E8DDD4;
+–shadow: 0 2px 12px rgba(45,27,14,0.08);
+–shadow-lg: 0 8px 32px rgba(45,27,14,0.12);
+–radius: 16px;
+–radius-sm: 10px;
+–font-jp: ‘M PLUS Rounded 1c’, sans-serif;
+–font-en: ‘Outfit’, sans-serif;
+}
+
+- { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+font-family: var(–font-jp);
+background: var(–bg);
+color: var(–text);
+min-height: 100dvh;
+-webkit-tap-highlight-color: transparent;
+}
+
+/* — レイアウト — */
+.app-container {
+max-width: 480px;
+margin: 0 auto;
+min-height: 100dvh;
+position: relative;
+}
+
+.screen {
+display: none;
+padding: 20px 16px;
+animation: fadeIn 0.3s ease;
+}
+.screen.active { display: block; }
+
+@keyframes fadeIn {
+from { opacity:0; transform: translateY(8px); }
+to { opacity:1; transform: translateY(0); }
+}
+
+/* — ヘッダー — */
+.header {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 16px 0 20px;
+}
+.header .back-btn {
+width: 40px; height: 40px;
+border: none; background: var(–bg-card);
+border-radius: 12px;
+font-size: 20px;
+cursor: pointer;
+box-shadow: var(–shadow);
+display: flex; align-items: center; justify-content: center;
+transition: transform 0.15s;
+}
+.header .back-btn:active { transform: scale(0.92); }
+.header h1 {
+font-size: 18px;
+font-weight: 700;
+}
+
+/* — カード — */
+.card {
+background: var(–bg-card);
+border-radius: var(–radius);
+padding: 20px;
+margin-bottom: 14px;
+box-shadow: var(–shadow);
+}
+
+/* — ボタン — */
+.btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+padding: 14px 28px;
+border: none;
+border-radius: var(–radius-sm);
+font-family: var(–font-jp);
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: transform 0.12s, box-shadow 0.12s;
+width: 100%;
+}
+.btn:active { transform: scale(0.96); }
+.btn-primary {
+background: var(–accent);
+color: #fff;
+box-shadow: 0 4px 16px rgba(232,101,43,0.3);
+}
+.btn-primary:hover { background: #d55a24; }
+.btn-secondary {
+background: var(–bg-card);
+color: var(–text);
+border: 2px solid var(–border);
+}
+.btn-correct { background: var(–correct); color: #fff; }
+.btn-close-ans { background: var(–close); color: #fff; }
+.btn-wrong { background: var(–wrong); color: #fff; }
+.btn-sm { padding: 10px 18px; font-size: 14px; }
+.btn + .btn { margin-top: 10px; }
+
+/* — ホーム画面 — */
+.home-hero {
+text-align: center;
+padding: 40px 0 24px;
+}
+.home-hero .logo {
+font-size: 48px;
+margin-bottom: 8px;
+}
+.home-hero h1 {
+font-size: 26px;
+font-weight: 800;
+background: linear-gradient(135deg, var(–accent), #C74E1A);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+.home-hero p {
+color: var(–text-sub);
+margin-top: 6px;
+font-size: 14px;
+line-height: 1.6;
+}
+.home-stats {
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 10px;
+margin: 20px 0;
+}
+.stat-box {
+background: var(–bg-card);
+border-radius: var(–radius-sm);
+padding: 14px 8px;
+text-align: center;
+box-shadow: var(–shadow);
+}
+.stat-box .num {
+font-family: var(–font-en);
+font-size: 24px;
+font-weight: 700;
+color: var(–accent);
+}
+.stat-box .label {
+font-size: 11px;
+color: var(–text-sub);
+margin-top: 2px;
+}
+.home-nav { margin-top: 16px; }
+
+/* — レッスン一覧 — */
+.lesson-item {
+background: var(–bg-card);
+border-radius: var(–radius);
+padding: 16px 18px;
+margin-bottom: 10px;
+box-shadow: var(–shadow);
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: 14px;
+transition: transform 0.12s;
+}
+.lesson-item:active { transform: scale(0.98); }
+.lesson-item .icon {
+width: 44px; height: 44px;
+border-radius: 12px;
+background: var(–accent-bg);
+display: flex; align-items: center; justify-content: center;
+font-size: 22px;
+flex-shrink: 0;
+}
+.lesson-item .info { flex: 1; }
+.lesson-item .info .title {
+font-weight: 600;
+font-size: 15px;
+}
+.lesson-item .info .meta {
+font-size: 12px;
+color: var(–text-sub);
+margin-top: 2px;
+}
+.lesson-item .progress-badge {
+font-family: var(–font-en);
+font-size: 13px;
+font-weight: 600;
+color: var(–correct);
+background: var(–correct-bg);
+padding: 4px 10px;
+border-radius: 20px;
+}
+
+/* — レッスン実行画面 — */
+.lesson-progress {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-bottom: 20px;
+}
+.progress-bar-bg {
+flex: 1;
+height: 8px;
+background: var(–border);
+border-radius: 4px;
+overflow: hidden;
+}
+.progress-bar-fill {
+height: 100%;
+background: var(–accent);
+border-radius: 4px;
+transition: width 0.4s ease;
+}
+.progress-text {
+font-family: var(–font-en);
+font-size: 13px;
+font-weight: 600;
+color: var(–text-sub);
+white-space: nowrap;
+}
+
+.turn-card {
+background: var(–bg-card);
+border-radius: var(–radius);
+padding: 24px 20px;
+box-shadow: var(–shadow-lg);
+text-align: center;
+min-height: 200px;
+}
+.turn-prompt {
+font-size: 20px;
+font-weight: 700;
+line-height: 1.5;
+margin-bottom: 12px;
+font-family: var(–font-en);
+}
+.turn-hint {
+font-size: 13px;
+color: var(–text-sub);
+margin-bottom: 16px;
+display: none;
+}
+.turn-hint.show { display: block; }
+.turn-timer {
+font-family: var(–font-en);
+font-size: 36px;
+font-weight: 700;
+color: var(–accent);
+margin: 10px 0;
+}
+.turn-timer.warning { color: var(–wrong); animation: pulse 0.5s infinite; }
+@keyframes pulse {
+0%,100% { opacity:1; }
+50% { opacity:0.5; }
+}
+
+/* 回答エリア */
+.answer-area { margin-top: 16px; }
+.answer-area textarea {
+width: 100%;
+min-height: 60px;
+border: 2px solid var(–border);
+border-radius: var(–radius-sm);
+padding: 12px;
+font-size: 16px;
+font-family: var(–font-en);
+resize: none;
+outline: none;
+transition: border-color 0.2s;
+}
+.answer-area textarea:focus {
+border-color: var(–accent);
+}
+.mic-btn {
+width: 72px; height: 72px;
+border-radius: 50%;
+border: none;
+background: var(–accent);
+color: #fff;
+font-size: 28px;
+cursor: pointer;
+box-shadow: 0 4px 20px rgba(232,101,43,0.35);
+transition: transform 0.15s;
+margin: 12px auto;
+display: flex; align-items: center; justify-content: center;
+}
+.mic-btn:active { transform: scale(0.9); }
+.mic-btn.recording {
+background: var(–wrong);
+animation: pulse-mic 1s infinite;
+}
+@keyframes pulse-mic {
+0%,100% { box-shadow: 0 0 0 0 rgba(215,58,73,0.4); }
+50% { box-shadow: 0 0 0 16px rgba(215,58,73,0); }
+}
+
+/* 判定結果 */
+.result-badge {
+display: inline-block;
+padding: 8px 24px;
+border-radius: 30px;
+font-weight: 700;
+font-size: 18px;
+margin: 12px 0;
+}
+.result-badge.correct { background: var(–correct-bg); color: var(–correct); }
+.result-badge.close { background: var(–close-bg); color: var(–close); }
+.result-badge.wrong { background: var(–wrong-bg); color: var(–wrong); }
+
+.recognized-text {
+font-family: var(–font-en);
+font-size: 17px;
+color: var(–text);
+background: var(–bg-card-alt);
+padding: 12px;
+border-radius: var(–radius-sm);
+margin: 10px 0;
+min-height: 40px;
+}
+.correct-answer {
+font-family: var(–font-en);
+font-size: 16px;
+color: var(–correct);
+background: var(–correct-bg);
+padding: 12px;
+border-radius: var(–radius-sm);
+margin: 8px 0;
+}
+
+/* — 結果画面 — */
+.result-summary {
+text-align: center;
+padding: 20px 0;
+}
+.result-circle {
+width: 140px; height: 140px;
+border-radius: 50%;
+background: conic-gradient(var(–correct) var(–pct, 0%), var(–border) 0%);
+display: flex; align-items: center; justify-content: center;
+margin: 0 auto 16px;
+position: relative;
+}
+.result-circle-inner {
+width: 110px; height: 110px;
+border-radius: 50%;
+background: var(–bg-card);
+display: flex; align-items: center; justify-content: center;
+flex-direction: column;
+}
+.result-circle-inner .big {
+font-family: var(–font-en);
+font-size: 36px;
+font-weight: 800;
+color: var(–correct);
+}
+.result-circle-inner .lbl {
+font-size: 12px;
+color: var(–text-sub);
+}
+.result-detail-list {
+margin: 16px 0;
+}
+.result-detail-item {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 10px 14px;
+background: var(–bg-card);
+border-radius: var(–radius-sm);
+margin-bottom: 8px;
+box-shadow: var(–shadow);
+font-size: 14px;
+}
+.result-detail-item .badge {
+padding: 3px 10px;
+border-radius: 20px;
+font-size: 12px;
+font-weight: 600;
+flex-shrink: 0;
+}
+.result-detail-item .badge.c { background: var(–correct-bg); color: var(–correct); }
+.result-detail-item .badge.cl { background: var(–close-bg); color: var(–close); }
+.result-detail-item .badge.w { background: var(–wrong-bg); color: var(–wrong); }
+.result-detail-item .q { flex:1; font-family: var(–font-en); }
+
+/* — 復習一覧 — */
+.review-item {
+background: var(–bg-card);
+border-radius: var(–radius);
+padding: 14px 16px;
+margin-bottom: 10px;
+box-shadow: var(–shadow);
+display: flex;
+align-items: center;
+gap: 12px;
+}
+.review-item .q-text {
+flex: 1;
+font-family: var(–font-en);
+font-size: 14px;
+}
+.review-item .remove-btn {
+background: none;
+border: none;
+color: var(–text-sub);
+font-size: 18px;
+cursor: pointer;
+}
+.empty-state {
+text-align: center;
+padding: 40px 20px;
+color: var(–text-sub);
+}
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+/* — 設定画面 — */
+.setting-row {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 14px 0;
+border-bottom: 1px solid var(–border);
+}
+.setting-row:last-child { border-bottom: none; }
+.setting-row .label { font-size: 15px; }
+.setting-row .sub { font-size: 12px; color: var(–text-sub); }
+.setting-row select, .setting-row input[type=“range”] {
+font-family: var(–font-jp);
+font-size: 14px;
+padding: 6px 10px;
+border: 1px solid var(–border);
+border-radius: 8px;
+background: var(–bg);
+}
+.setting-row input[type=“range”] {
+width: 120px;
+accent-color: var(–accent);
+}
+.toggle {
+width: 52px; height: 28px;
+border-radius: 14px;
+background: var(–border);
+border: none;
+position: relative;
+cursor: pointer;
+transition: background 0.2s;
+}
+.toggle.on { background: var(–correct); }
+.toggle::after {
+content: ‘’;
+width: 22px; height: 22px;
+border-radius: 50%;
+background: #fff;
+position: absolute;
+top: 3px; left: 3px;
+transition: transform 0.2s;
+}
+.toggle.on::after { transform: translateX(24px); }
+
+/* — 通知トースト — */
+.toast {
+position: fixed;
+bottom: 80px;
+left: 50%; transform: translateX(-50%);
+background: var(–text);
+color: #fff;
+padding: 10px 24px;
+border-radius: 30px;
+font-size: 14px;
+z-index: 100;
+opacity: 0;
+transition: opacity 0.3s;
+pointer-events: none;
+}
+.toast.show { opacity: 1; }
+
+/* — フッタースペース — */
+.bottom-spacer { height: 40px; }
+</style>
+
+</head>
+<body>
+
+<div class="app-container" id="app">
+
+  <!-- ===== ホーム画面 ===== -->
+
+  <div class="screen active" id="screen-home">
+    <div class="home-hero">
+      <div class="logo">🗣️</div>
+      <h1>ターンメソッド</h1>
+      <p>英語の質問を聞いて、すぐ答える。<br>瞬発力を鍛える発話トレーニング</p>
+    </div>
+    <div class="home-stats" id="home-stats">
+      <div class="stat-box"><div class="num" id="stat-total">0</div><div class="label">総回答数</div></div>
+      <div class="stat-box"><div class="num" id="stat-correct">0%</div><div class="label">正答率</div></div>
+      <div class="stat-box"><div class="num" id="stat-streak">0</div><div class="label">連続日数</div></div>
+    </div>
+    <div class="home-nav">
+      <button class="btn btn-primary" onclick="showScreen('screen-lessons')">📚 レッスンを始める</button>
+      <button class="btn btn-secondary" onclick="showScreen('screen-review')">🔄 復習する <span id="review-count-badge"></span></button>
+      <button class="btn btn-secondary" onclick="showScreen('screen-settings')">⚙️ 設定</button>
+    </div>
+  </div>
+
+  <!-- ===== レッスン一覧画面 ===== -->
+
+  <div class="screen" id="screen-lessons">
+    <div class="header">
+      <button class="back-btn" onclick="showScreen('screen-home')">←</button>
+      <h1>レッスン一覧</h1>
+    </div>
+    <div id="lesson-list"></div>
+    <div class="bottom-spacer"></div>
+  </div>
+
+  <!-- ===== レッスン実行画面 ===== -->
+
+  <div class="screen" id="screen-play">
+    <div class="header">
+      <button class="back-btn" onclick="confirmExit()">←</button>
+      <h1 id="play-title">レッスン</h1>
+    </div>
+    <div class="lesson-progress">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="play-progress-bar"></div></div>
+      <span class="progress-text" id="play-progress-text">1/10</span>
+    </div>
+
+```
+<!-- フェーズ: 問題提示 -->
+<div id="phase-prompt" class="turn-card">
+  <div class="turn-prompt" id="prompt-text"></div>
+  <div class="turn-hint" id="prompt-hint"></div>
+  <button class="btn btn-sm btn-secondary" onclick="toggleHint()" id="hint-btn">💡 ヒントを見る</button>
+  <div style="margin-top:16px">
+    <button class="btn btn-primary" onclick="startAnswering()">🎤 回答する</button>
+  </div>
+</div>
+
+<!-- フェーズ: 回答入力 -->
+<div id="phase-answer" class="turn-card" style="display:none">
+  <div class="turn-prompt" id="answer-prompt-text" style="font-size:16px;color:var(--text-sub)"></div>
+  <div class="turn-timer" id="answer-timer">--</div>
+  <div class="answer-area">
+    <!-- 音声入力 -->
+    <div id="voice-input-area">
+      <button class="mic-btn" id="mic-btn" onclick="toggleRecording()">🎤</button>
+      <p style="font-size:12px;color:var(--text-sub);text-align:center;margin-top:4px" id="mic-status">タップして話す</p>
+    </div>
+    <!-- テキスト入力フォールバック -->
+    <div id="text-input-area" style="display:none">
+      <textarea id="text-answer" placeholder="英語で入力..." rows="2"></textarea>
+    </div>
+    <button class="btn btn-sm btn-secondary" onclick="toggleInputMode()" id="input-mode-btn">⌨️ テキストで入力</button>
+    <div class="recognized-text" id="recognized-text" style="display:none"></div>
+    <button class="btn btn-primary" id="submit-btn" onclick="submitAnswer()" style="display:none;margin-top:12px">✅ 回答を送信</button>
+  </div>
+</div>
+
+<!-- フェーズ: 判定結果 -->
+<div id="phase-result" class="turn-card" style="display:none">
+  <div class="result-badge" id="result-badge"></div>
+  <p style="font-size:13px;color:var(--text-sub);margin-bottom:8px">あなたの回答</p>
+  <div class="recognized-text" id="result-user-answer"></div>
+  <p style="font-size:13px;color:var(--text-sub);margin-bottom:4px;margin-top:12px">正答例</p>
+  <div class="correct-answer" id="result-correct-answer"></div>
+  <button class="btn btn-sm btn-secondary" onclick="speakCorrectAnswer()" style="margin-top:8px">🔊 正答を聞く</button>
+  <div style="margin-top:16px;display:flex;gap:10px">
+    <button class="btn btn-secondary" onclick="retryTurn()" style="flex:1">🔄 もう一度</button>
+    <button class="btn btn-primary" onclick="nextTurn()" style="flex:1">次へ →</button>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- ===== 結果画面 ===== -->
+
+  <div class="screen" id="screen-result">
+    <div class="header">
+      <button class="back-btn" onclick="showScreen('screen-home')">←</button>
+      <h1>レッスン結果</h1>
+    </div>
+    <div class="result-summary">
+      <div class="result-circle" id="result-circle">
+        <div class="result-circle-inner">
+          <div class="big" id="result-pct">0%</div>
+          <div class="lbl">正答率</div>
+        </div>
+      </div>
+      <p style="font-size:14px;color:var(--text-sub)" id="result-summary-text"></p>
+    </div>
+    <div class="result-detail-list" id="result-detail-list"></div>
+    <button class="btn btn-primary" onclick="showScreen('screen-home')">🏠 ホームに戻る</button>
+    <button class="btn btn-secondary" onclick="replayLesson()">🔄 もう一度挑戦</button>
+    <div class="bottom-spacer"></div>
+  </div>
+
+  <!-- ===== 復習一覧画面 ===== -->
+
+  <div class="screen" id="screen-review">
+    <div class="header">
+      <button class="back-btn" onclick="showScreen('screen-home')">←</button>
+      <h1>復習リスト</h1>
+    </div>
+    <div id="review-list"></div>
+    <div id="review-empty" class="empty-state" style="display:none">
+      <div class="icon">✨</div>
+      <p>復習する問題はありません！<br>素晴らしい！</p>
+    </div>
+    <button class="btn btn-primary" id="review-start-btn" onclick="startReview()" style="display:none">🔄 復習を開始する</button>
+    <div class="bottom-spacer"></div>
+  </div>
+
+  <!-- ===== 設定画面 ===== -->
+
+  <div class="screen" id="screen-settings">
+    <div class="header">
+      <button class="back-btn" onclick="showScreen('screen-home')">←</button>
+      <h1>設定</h1>
+    </div>
+    <div class="card">
+      <div class="setting-row">
+        <div><div class="label">読み上げ速度</div><div class="sub">TTS速度を調整</div></div>
+        <input type="range" min="0.5" max="1.5" step="0.1" value="0.9" id="set-tts-speed" onchange="saveSetting('ttsSpeed', this.value)">
+      </div>
+      <div class="setting-row">
+        <div><div class="label">自動読み上げ</div><div class="sub">問題文を自動で読み上げる</div></div>
+        <button class="toggle on" id="set-auto-tts" onclick="toggleSetting(this, 'autoTTS')"></button>
+      </div>
+      <div class="setting-row">
+        <div><div class="label">テキスト入力モード</div><div class="sub">常にテキスト入力を使う</div></div>
+        <button class="toggle" id="set-text-mode" onclick="toggleSetting(this, 'textMode')"></button>
+      </div>
+      <div class="setting-row">
+        <div><div class="label">制限時間</div><div class="sub">回答の制限時間を有効化</div></div>
+        <button class="toggle on" id="set-timer" onclick="toggleSetting(this, 'timerEnabled')"></button>
+      </div>
+      <div class="setting-row">
+        <div><div class="label">TTS音声</div><div class="sub">読み上げの声を選択</div></div>
+        <select id="set-voice" onchange="saveSetting('voiceName', this.value)">
+          <option value="">デフォルト</option>
+        </select>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="setting-row">
+        <div><div class="label">学習データをリセット</div><div class="sub">すべての履歴・進捗を削除</div></div>
+        <button class="btn btn-sm" style="background:var(--wrong-bg);color:var(--wrong);width:auto" onclick="resetAllData()">リセット</button>
+      </div>
+    </div>
+    <div class="bottom-spacer"></div>
+  </div>
+
+</div><!-- /app-container -->
+
+<!-- トースト -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ========================================
+   ターンメソッド - メインJavaScript
+   ======================================== */
+
+// ============================================================
+// ■ サンプルレッスンJSON（埋め込み版）
+//   将来は fetch('/lessons/lesson-001.json') で外部読み込み
+// ============================================================
+const EMBEDDED_LESSONS = [
+  {
+    lessonId: "lesson-001",
+    title: "基本あいさつ・自己紹介",
+    version: "1.0.0",
+    language: "en",
+    icon: "👋",
+    settings: { defaultTimeLimitSec: 10 },
+    turns: [
+      {
+        id: "t001",
+        type: "qa",
+        promptText: "What is your name?",
+        ttsText: "What is your name?",
+        expectedAnswerDisplay: "My name is [your name].",
+        acceptedVariants: [
+          "my name is *",
+          "i'm *",
+          "i am *",
+          "call me *"
+        ],
+        hint: "My name is ... と答えましょう",
+        timeLimitSec: 10,
+        next: { correct: "t002", close: "t002", wrong: "t001" }
+      },
+      {
+        id: "t002",
+        type: "qa",
+        promptText: "How are you?",
+        ttsText: "How are you?",
+        expectedAnswerDisplay: "I'm fine, thank you.",
+        acceptedVariants: [
+          "i'm fine thank you",
+          "i'm fine thanks",
+          "i'm good thank you",
+          "i'm good thanks",
+          "i'm doing well",
+          "i'm great",
+          "good thanks",
+          "fine thank you",
+          "i am fine thank you",
+          "pretty good"
+        ],
+        hint: "I'm fine, thank you. が定番です",
+        timeLimitSec: 10,
+        next: { correct: "t003", close: "t003", wrong: "t002" }
+      },
+      {
+        id: "t003",
+        type: "qa",
+        promptText: "Nice to meet you.",
+        ttsText: "Nice to meet you.",
+        expectedAnswerDisplay: "Nice to meet you too.",
+        acceptedVariants: [
+          "nice to meet you too",
+          "nice to meet you as well",
+          "pleased to meet you too",
+          "pleased to meet you",
+          "it's nice to meet you too"
+        ],
+        hint: "Nice to meet you too. と返しましょう",
+        timeLimitSec: 10,
+        next: { correct: "t004", close: "t004", wrong: "t003" }
+      },
+      {
+        id: "t004",
+        type: "qa",
+        promptText: "Where are you from?",
+        ttsText: "Where are you from?",
+        expectedAnswerDisplay: "I'm from Japan.",
+        acceptedVariants: [
+          "i'm from *",
+          "i am from *",
+          "i come from *"
+        ],
+        hint: "I'm from ... と答えましょう",
+        timeLimitSec: 10,
+        next: { correct: "t005", close: "t005", wrong: "t004" }
+      },
+      {
+        id: "t005",
+        type: "qa",
+        promptText: "What do you do?",
+        ttsText: "What do you do?",
+        expectedAnswerDisplay: "I'm an engineer. / I'm a student.",
+        acceptedVariants: [
+          "i'm a *",
+          "i'm an *",
+          "i am a *",
+          "i am an *",
+          "i work as *",
+          "i work at *"
+        ],
+        hint: "I'm a/an ... で職業を答えましょう",
+        timeLimitSec: 12,
+        next: { correct: "t006", close: "t006", wrong: "t005" }
+      },
+      {
+        id: "t006",
+        type: "qa",
+        promptText: "How old are you?",
+        ttsText: "How old are you?",
+        expectedAnswerDisplay: "I'm [number] years old.",
+        acceptedVariants: [
+          "i'm * years old",
+          "i am * years old"
+        ],
+        hint: "I'm ○○ years old. と答えましょう",
+        timeLimitSec: 10,
+        next: { correct: "t007", close: "t007", wrong: "t006" }
+      },
+      {
+        id: "t007",
+        type: "qa",
+        promptText: "What's your hobby?",
+        ttsText: "What's your hobby?",
+        expectedAnswerDisplay: "I like [hobby]. / My hobby is [hobby].",
+        acceptedVariants: [
+          "i like *",
+          "my hobby is *",
+          "i enjoy *",
+          "i love *"
+        ],
+        hint: "I like ... / My hobby is ... と答えましょう",
+        timeLimitSec: 12,
+        next: { correct: "t008", close: "t008", wrong: "t007" }
+      },
+      {
+        id: "t008",
+        type: "qa",
+        promptText: "Do you like coffee?",
+        ttsText: "Do you like coffee?",
+        expectedAnswerDisplay: "Yes, I do. / No, I don't.",
+        acceptedVariants: [
+          "yes i do",
+          "no i don't",
+          "no i do not",
+          "yes i like coffee",
+          "no i don't like coffee",
+          "yes i love coffee",
+          "i prefer tea"
+        ],
+        hint: "Yes, I do. / No, I don't. で答えましょう",
+        timeLimitSec: 8,
+        next: { correct: "t009", close: "t009", wrong: "t008" }
+      },
+      {
+        id: "t009",
+        type: "qa",
+        promptText: "Can you speak English?",
+        ttsText: "Can you speak English?",
+        expectedAnswerDisplay: "Yes, a little. / I'm learning English.",
+        acceptedVariants: [
+          "yes a little",
+          "yes i can",
+          "a little",
+          "i'm learning english",
+          "i am learning english",
+          "just a little",
+          "not very well"
+        ],
+        hint: "Yes, a little. がよく使われます",
+        timeLimitSec: 10,
+        next: { correct: "t010", close: "t010", wrong: "t009" }
+      },
+      {
+        id: "t010",
+        type: "qa",
+        promptText: "Thank you very much!",
+        ttsText: "Thank you very much!",
+        expectedAnswerDisplay: "You're welcome!",
+        acceptedVariants: [
+          "you're welcome",
+          "you are welcome",
+          "no problem",
+          "my pleasure",
+          "don't mention it",
+          "anytime"
+        ],
+        hint: "You're welcome! と返しましょう",
+        timeLimitSec: 8,
+        next: { correct: null, close: null, wrong: "t010" }
+      }
+    ]
+  },
+  {
+    lessonId: "lesson-002",
+    title: "日常会話・予定を話す",
+    version: "1.0.0",
+    language: "en",
+    icon: "📅",
+    settings: { defaultTimeLimitSec: 12 },
+    turns: [
+      {
+        id: "u001",
+        type: "qa",
+        promptText: "What did you do yesterday?",
+        ttsText: "What did you do yesterday?",
+        expectedAnswerDisplay: "I went to [place]. / I stayed home.",
+        acceptedVariants: [
+          "i went to *",
+          "i stayed home",
+          "i stayed at home",
+          "i watched *",
+          "i played *",
+          "i studied *",
+          "i worked *",
+          "i cooked *",
+          "i read *"
+        ],
+        hint: "I went to ... / I stayed home. のように過去形で答えましょう",
+        timeLimitSec: 12,
+        next: { correct: "u002", close: "u002", wrong: "u001" }
+      },
+      {
+        id: "u002",
+        type: "qa",
+        promptText: "What are you going to do this weekend?",
+        ttsText: "What are you going to do this weekend?",
+        expectedAnswerDisplay: "I'm going to [activity].",
+        acceptedVariants: [
+          "i'm going to *",
+          "i am going to *",
+          "i will *",
+          "i'll *",
+          "i plan to *"
+        ],
+        hint: "I'm going to ... で予定を伝えましょう",
+        timeLimitSec: 12,
+        next: { correct: "u003", close: "u003", wrong: "u002" }
+      },
+      {
+        id: "u003",
+        type: "qa",
+        promptText: "What time do you usually wake up?",
+        ttsText: "What time do you usually wake up?",
+        expectedAnswerDisplay: "I usually wake up at [time].",
+        acceptedVariants: [
+          "i usually wake up at *",
+          "i wake up at *",
+          "i get up at *",
+          "around *",
+          "at * o'clock",
+          "about *"
+        ],
+        hint: "I usually wake up at ○○. と答えましょう",
+        timeLimitSec: 12,
+        next: { correct: "u004", close: "u004", wrong: "u003" }
+      },
+      {
+        id: "u004",
+        type: "qa",
+        promptText: "What's the weather like today?",
+        ttsText: "What's the weather like today?",
+        expectedAnswerDisplay: "It's sunny. / It's cloudy. / It's rainy.",
+        acceptedVariants: [
+          "it's sunny",
+          "it's cloudy",
+          "it's rainy",
+          "it is sunny",
+          "it is cloudy",
+          "it is rainy",
+          "it's hot",
+          "it's cold",
+          "it's warm",
+          "it's nice"
+        ],
+        hint: "It's sunny/cloudy/rainy. など天気を答えましょう",
+        timeLimitSec: 10,
+        next: { correct: "u005", close: "u005", wrong: "u004" }
+      },
+      {
+        id: "u005",
+        type: "qa",
+        promptText: "How do you get to work?",
+        ttsText: "How do you get to work?",
+        expectedAnswerDisplay: "I take the train. / I drive.",
+        acceptedVariants: [
+          "i take the train",
+          "i drive",
+          "i walk",
+          "i ride my bike",
+          "i take the bus",
+          "by train",
+          "by car",
+          "by bus",
+          "on foot",
+          "i cycle"
+        ],
+        hint: "I take the train. / I drive. のように交通手段を答えましょう",
+        timeLimitSec: 10,
+        next: { correct: null, close: null, wrong: "u005" }
+      }
+    ]
+  }
+];
+
+// ============================================================
+// ■ ストレージ管理
+// ============================================================
+const STORAGE_KEYS = {
+  settings: 'tm_settings',
+  history: 'tm_history',
+  review: 'tm_review',
+  progress: 'tm_progress',
+  streak: 'tm_streak'
+};
+
+/** localStorageから安全に読む */
+function loadData(key, defaultVal) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : defaultVal;
+  } catch (e) {
+    console.warn('ストレージ読み込みエラー:', key, e);
+    return defaultVal;
+  }
+}
+
+/** localStorageへ安全に書く */
+function saveData(key, val) {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+  } catch (e) {
+    console.warn('ストレージ書き込みエラー:', key, e);
+  }
+}
+
+// ============================================================
+// ■ 設定管理
+// ============================================================
+const DEFAULT_SETTINGS = {
+  ttsSpeed: 0.9,
+  autoTTS: true,
+  textMode: false,
+  timerEnabled: true,
+  voiceName: ''
+};
+
+let appSettings = { ...DEFAULT_SETTINGS, ...loadData(STORAGE_KEYS.settings, {}) };
+
+function saveSetting(key, value) {
+  if (value === 'true') value = true;
+  if (value === 'false') value = false;
+  if (!isNaN(value) && typeof value === 'string' && value !== '') value = parseFloat(value);
+  appSettings[key] = value;
+  saveData(STORAGE_KEYS.settings, appSettings);
+}
+
+function toggleSetting(btn, key) {
+  const isOn = btn.classList.toggle('on');
+  saveSetting(key, isOn);
+}
+
+function loadSettingsUI() {
+  document.getElementById('set-tts-speed').value = appSettings.ttsSpeed;
+  setToggleState('set-auto-tts', appSettings.autoTTS);
+  setToggleState('set-text-mode', appSettings.textMode);
+  setToggleState('set-timer', appSettings.timerEnabled);
+  // TTS音声一覧を非同期で読み込む
+  populateVoices();
+}
+
+function setToggleState(id, on) {
+  const el = document.getElementById(id);
+  if (el) { on ? el.classList.add('on') : el.classList.remove('on'); }
+}
+
+function populateVoices() {
+  const select = document.getElementById('set-voice');
+  const voices = speechSynthesis.getVoices();
+  const enVoices = voices.filter(v => v.lang.startsWith('en'));
+  select.innerHTML = '<option value="">デフォルト</option>';
+  enVoices.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v.name;
+    opt.textContent = `${v.name} (${v.lang})`;
+    if (v.name === appSettings.voiceName) opt.selected = true;
+    select.appendChild(opt);
+  });
+}
+// 音声一覧は非同期で読み込まれる場合がある
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoices;
+}
+
+// ============================================================
+// ■ 画面遷移
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(id);
+  if (target) target.classList.add('active');
+
+  // 画面切替時の初期化
+  if (id === 'screen-home') refreshHomeStats();
+  if (id === 'screen-lessons') renderLessonList();
+  if (id === 'screen-review') renderReviewList();
+  if (id === 'screen-settings') loadSettingsUI();
+
+  window.scrollTo(0, 0);
+}
+
+// ============================================================
+// ■ レッスンデータ読み込み
+//   現在は埋め込みJSON、将来はfetchで外部読み込み可
+// ============================================================
+let lessonData = [];
+
+/**
+ * レッスンデータを読み込む
+ * 将来の外部JSON対応例:
+ *   async function loadLessons() {
+ *     const res = await fetch('/api/lessons');
+ *     lessonData = await res.json();
+ *   }
+ */
+function loadLessons() {
+  lessonData = EMBEDDED_LESSONS;
+}
+
+function findLesson(lessonId) {
+  return lessonData.find(l => l.lessonId === lessonId) || null;
+}
+
+function findTurn(lesson, turnId) {
+  return lesson.turns.find(t => t.id === turnId) || null;
+}
+
+// ============================================================
+// ■ ホーム画面
+// ============================================================
+function refreshHomeStats() {
+  const history = loadData(STORAGE_KEYS.history, []);
+  const review = loadData(STORAGE_KEYS.review, []);
+
+  const total = history.reduce((s, h) => s + (h.results ? h.results.length : 0), 0);
+  const correctCount = history.reduce((s, h) =>
+    s + (h.results ? h.results.filter(r => r.judgment === 'correct').length : 0), 0);
+  const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-correct').textContent = pct + '%';
+  document.getElementById('stat-streak').textContent = calcStreak();
+
+  const badge = document.getElementById('review-count-badge');
+  badge.textContent = review.length > 0 ? `(${review.length})` : '';
+}
+
+function calcStreak() {
+  const streakData = loadData(STORAGE_KEYS.streak, { lastDate: null, count: 0 });
+  const today = new Date().toISOString().slice(0, 10);
+  if (streakData.lastDate === today) return streakData.count;
+
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  if (streakData.lastDate === yesterday) return streakData.count;
+
+  return 0;
+}
+
+function updateStreak() {
+  const streakData = loadData(STORAGE_KEYS.streak, { lastDate: null, count: 0 });
+  const today = new Date().toISOString().slice(0, 10);
+  if (streakData.lastDate === today) return;
+
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  if (streakData.lastDate === yesterday) {
+    streakData.count++;
+  } else {
+    streakData.count = 1;
+  }
+  streakData.lastDate = today;
+  saveData(STORAGE_KEYS.streak, streakData);
+}
+
+// ============================================================
+// ■ レッスン一覧
+// ============================================================
+function renderLessonList() {
+  const container = document.getElementById('lesson-list');
+  const progress = loadData(STORAGE_KEYS.progress, {});
+  container.innerHTML = '';
+
+  lessonData.forEach(lesson => {
+    const prog = progress[lesson.lessonId];
+    const pctText = prog ? `${prog.correctCount}/${prog.totalCount}` : '未挑戦';
+
+    const div = document.createElement('div');
+    div.className = 'lesson-item';
+    div.onclick = () => startLesson(lesson.lessonId);
+    div.innerHTML = `
+      <div class="icon">${lesson.icon || '📖'}</div>
+      <div class="info">
+        <div class="title">${lesson.title}</div>
+        <div class="meta">${lesson.turns.length}問 ・ v${lesson.version}</div>
+      </div>
+      <div class="progress-badge">${pctText}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ============================================================
+// ■ レッスン実行エンジン（ターンメソッドランナー）
+// ============================================================
+let currentLesson = null;
+let currentTurnIndex = 0;
+let currentTurn = null;
+let sessionResults = [];
+let timerInterval = null;
+let timerValue = 0;
+let isRecording = false;
+let recognition = null;
+let recognizedText = '';
+let isReviewMode = false;
+let reviewTurns = [];
+
+/** レッスン開始 */
+function startLesson(lessonId) {
+  currentLesson = findLesson(lessonId);
+  if (!currentLesson) {
+    showToast('レッスンが見つかりません');
+    return;
+  }
+  currentTurnIndex = 0;
+  sessionResults = [];
+  isReviewMode = false;
+  document.getElementById('play-title').textContent = currentLesson.title;
+  showScreen('screen-play');
+  loadTurn(0);
+}
+
+/** 復習モードで開始 */
+function startReview() {
+  const review = loadData(STORAGE_KEYS.review, []);
+  if (review.length === 0) {
+    showToast('復習する問題がありません');
+    return;
+  }
+  // 復習用の仮レッスンを構築
+  isReviewMode = true;
+  reviewTurns = review.map(r => r.turn);
+  currentLesson = {
+    lessonId: 'review-session',
+    title: '復習セッション',
+    turns: reviewTurns
+  };
+  currentTurnIndex = 0;
+  sessionResults = [];
+  document.getElementById('play-title').textContent = '復習セッション';
+  showScreen('screen-play');
+  loadTurn(0);
+}
+
+/** ターン読み込み */
+function loadTurn(index) {
+  if (!currentLesson) return;
+  if (index >= currentLesson.turns.length) {
+    finishLesson();
+    return;
+  }
+
+  currentTurnIndex = index;
+  currentTurn = currentLesson.turns[index];
+  recognizedText = '';
+
+  // UI更新
+  updateProgress();
+  showPhase('prompt');
+
+  // 問題文設定
+  document.getElementById('prompt-text').textContent = currentTurn.promptText;
+  document.getElementById('prompt-hint').textContent = currentTurn.hint || '';
+  document.getElementById('prompt-hint').classList.remove('show');
+  document.getElementById('hint-btn').style.display = currentTurn.hint ? '' : 'none';
+  document.getElementById('answer-prompt-text').textContent = currentTurn.promptText;
+
+  // 自動読み上げ
+  if (appSettings.autoTTS) {
+    speak(currentTurn.ttsText || currentTurn.promptText);
+  }
+}
+
+function updateProgress() {
+  const total = currentLesson.turns.length;
+  const current = currentTurnIndex + 1;
+  const pct = Math.round((currentTurnIndex / total) * 100);
+  document.getElementById('play-progress-bar').style.width = pct + '%';
+  document.getElementById('play-progress-text').textContent = `${current}/${total}`;
+}
+
+function showPhase(phase) {
+  ['prompt', 'answer', 'result'].forEach(p => {
+    document.getElementById('phase-' + p).style.display = (p === phase) ? '' : 'none';
+  });
+}
+
+function toggleHint() {
+  document.getElementById('prompt-hint').classList.toggle('show');
+}
+
+// ============================================================
+// ■ 回答フェーズ
+// ============================================================
+function startAnswering() {
+  showPhase('answer');
+  recognizedText = '';
+  document.getElementById('recognized-text').style.display = 'none';
+  document.getElementById('recognized-text').textContent = '';
+  document.getElementById('submit-btn').style.display = 'none';
+  document.getElementById('text-answer').value = '';
+  document.getElementById('mic-status').textContent = 'タップして話す';
+
+  // テキストモード判定
+  const forceText = appSettings.textMode || !isSpeechRecognitionSupported();
+  if (forceText) {
+    document.getElementById('voice-input-area').style.display = 'none';
+    document.getElementById('text-input-area').style.display = '';
+    document.getElementById('input-mode-btn').style.display = 'none';
+    document.getElementById('submit-btn').style.display = '';
+  } else {
+    document.getElementById('voice-input-area').style.display = '';
+    document.getElementById('text-input-area').style.display = 'none';
+    document.getElementById('input-mode-btn').style.display = '';
+    document.getElementById('input-mode-btn').textContent = '⌨️ テキストで入力';
+  }
+
+  // タイマー開始
+  if (appSettings.timerEnabled) {
+    startTimer(currentTurn.timeLimitSec || 10);
+  } else {
+    document.getElementById('answer-timer').textContent = '--';
+  }
+}
+
+let isTextInputMode = false;
+
+function toggleInputMode() {
+  isTextInputMode = !isTextInputMode;
+  if (isTextInputMode) {
+    document.getElementById('voice-input-area').style.display = 'none';
+    document.getElementById('text-input-area').style.display = '';
+    document.getElementById('input-mode-btn').textContent = '🎤 音声で入力';
+    document.getElementById('submit-btn').style.display = '';
+    stopRecordingIfActive();
+  } else {
+    document.getElementById('voice-input-area').style.display = '';
+    document.getElementById('text-input-area').style.display = 'none';
+    document.getElementById('input-mode-btn').textContent = '⌨️ テキストで入力';
+    if (!recognizedText) document.getElementById('submit-btn').style.display = 'none';
+  }
+}
+
+// ============================================================
+// ■ タイマー
+// ============================================================
+function startTimer(seconds) {
+  clearInterval(timerInterval);
+  timerValue = seconds;
+  const el = document.getElementById('answer-timer');
+  el.textContent = timerValue;
+  el.classList.remove('warning');
+
+  timerInterval = setInterval(() => {
+    timerValue--;
+    el.textContent = timerValue;
+    if (timerValue <= 3) el.classList.add('warning');
+    if (timerValue <= 0) {
+      clearInterval(timerInterval);
+      stopRecordingIfActive();
+      // 時間切れ → 自動送信
+      if (!recognizedText && !document.getElementById('text-answer').value.trim()) {
+        recognizedText = '';
+      }
+      submitAnswer();
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+// ============================================================
+// ■ 音声認識（Web Speech API）
+// ============================================================
+function isSpeechRecognitionSupported() {
+  return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+}
+
+function toggleRecording() {
+  if (isRecording) {
+    stopRecordingIfActive();
+  } else {
+    startRecording();
+  }
+}
+
+function startRecording() {
+  if (!isSpeechRecognitionSupported()) {
+    showToast('音声認識非対応です。テキスト入力を使ってください。');
+    toggleInputMode();
+    return;
+  }
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+  recognition.continuous = false;
+
+  recognition.onstart = () => {
+    isRecording = true;
+    document.getElementById('mic-btn').classList.add('recording');
+    document.getElementById('mic-status').textContent = '聞いています...';
+  };
+
+  recognition.onresult = (event) => {
+    let interim = '';
+    let final = '';
+    for (let i = 0; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        final += event.results[i][0].transcript;
+      } else {
+        interim += event.results[i][0].transcript;
+      }
+    }
+    recognizedText = final || interim;
+    document.getElementById('recognized-text').textContent = recognizedText;
+    document.getElementById('recognized-text').style.display = '';
+    if (final) {
+      document.getElementById('submit-btn').style.display = '';
+    }
+  };
+
+  recognition.onerror = (event) => {
+    console.warn('音声認識エラー:', event.error);
+    if (event.error === 'not-allowed') {
+      showToast('マイクの使用が許可されていません');
+    }
+    stopRecordingIfActive();
+  };
+
+  recognition.onend = () => {
+    isRecording = false;
+    document.getElementById('mic-btn').classList.remove('recording');
+    document.getElementById('mic-status').textContent = 'タップして話す';
+    if (recognizedText) {
+      document.getElementById('submit-btn').style.display = '';
+    }
+  };
+
+  try {
+    recognition.start();
+  } catch (e) {
+    console.warn('音声認識開始エラー:', e);
+    showToast('音声認識を開始できません');
+  }
+}
+
+function stopRecordingIfActive() {
+  if (recognition && isRecording) {
+    try { recognition.stop(); } catch (e) { /* noop */ }
+  }
+  isRecording = false;
+  document.getElementById('mic-btn').classList.remove('recording');
+}
+
+// ============================================================
+// ■ 音声読み上げ（TTS）
+// ============================================================
+function speak(text, onEnd) {
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-US';
+  utter.rate = parseFloat(appSettings.ttsSpeed) || 0.9;
+
+  if (appSettings.voiceName) {
+    const voices = speechSynthesis.getVoices();
+    const v = voices.find(v => v.name === appSettings.voiceName);
+    if (v) utter.voice = v;
+  }
+
+  if (onEnd) utter.onend = onEnd;
+  speechSynthesis.speak(utter);
+}
+
+function speakCorrectAnswer() {
+  if (currentTurn) {
+    speak(currentTurn.ttsText || currentTurn.expectedAnswerDisplay);
+  }
+}
+
+// ============================================================
+// ■ 回答判定ロジック
+// ============================================================
+
+/** テキスト正規化 */
+function normalize(text) {
+  return text
+    .toLowerCase()
+    .replace(/['']/g, "'")       // スマートクォート正規化
+    .replace(/[.,!?;:"""()]/g, '') // 句読点除去
+    .replace(/\s+/g, ' ')       // 複数空白を1つに
+    .trim();
+}
+
+/**
+ * ワイルドカードパターンマッチ
+ * "*" は任意の1語以上にマッチ
+ */
+function matchPattern(pattern, input) {
+  const normP = normalize(pattern);
+  const normI = normalize(input);
+
+  if (!normP.includes('*')) {
+    return normP === normI;
+  }
+
+  // ワイルドカードパターンを正規表現に変換
+  const regexStr = '^' + normP.split('*').map(s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('.+') + '$';
+  try {
+    return new RegExp(regexStr).test(normI);
+  } catch (e) {
+    return false;
+  }
+}
+
+/**
+ * 編集距離（レーベンシュタイン距離）
+ */
+function editDistance(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+  }
+  return dp[m][n];
+}
+
+/**
+ * 回答を判定する
+ * @returns 'correct' | 'close' | 'wrong'
+ */
+function judgeAnswer(userAnswer, turn) {
+  if (!userAnswer || userAnswer.trim() === '') return 'wrong';
+
+  const variants = turn.acceptedVariants || [];
+
+  // 1. 完全一致（正規化後）
+  for (const v of variants) {
+    if (matchPattern(v, userAnswer)) return 'correct';
+  }
+
+  // 2. 編集距離で「惜しい」判定
+  const normUser = normalize(userAnswer);
+  for (const v of variants) {
+    if (v.includes('*')) continue; // ワイルドカードは編集距離不適用
+    const normV = normalize(v);
+    const dist = editDistance(normUser, normV);
+    const threshold = Math.max(2, Math.floor(normV.length * 0.25));
+    if (dist <= threshold) return 'close';
+  }
+
+  return 'wrong';
+}
+
+// ============================================================
+// ■ 回答送信・判定表示
+// ============================================================
+function submitAnswer() {
+  stopTimer();
+  stopRecordingIfActive();
+
+  // 回答テキスト取得
+  const textArea = document.getElementById('text-answer');
+  const userAnswer = recognizedText || textArea.value.trim();
+
+  // 判定
+  const judgment = judgeAnswer(userAnswer, currentTurn);
+
+  // 結果をセッションに記録
+  sessionResults.push({
+    turnId: currentTurn.id,
+    promptText: currentTurn.promptText,
+    userAnswer: userAnswer || '(未回答)',
+    expectedAnswer: currentTurn.expectedAnswerDisplay,
+    judgment: judgment,
+    timestamp: Date.now()
+  });
+
+  // 復習キュー登録（不正解・惜しい）
+  if (judgment !== 'correct') {
+    addToReviewQueue(currentTurn, currentLesson.lessonId);
+  } else {
+    // 正解したら復習キューから削除
+    removeFromReviewQueue(currentTurn.id);
+  }
+
+  // 判定結果UI表示
+  showPhase('result');
+  const badge = document.getElementById('result-badge');
+  badge.className = 'result-badge ' + judgment;
+  badge.textContent = judgment === 'correct' ? '🎉 正解！' :
+                       judgment === 'close' ? '🤔 惜しい！' : '❌ 不正解';
+
+  document.getElementById('result-user-answer').textContent = userAnswer || '(未回答)';
+  document.getElementById('result-correct-answer').textContent = currentTurn.expectedAnswerDisplay;
+}
+
+/** もう一度（同じターン） */
+function retryTurn() {
+  // 最後のresultを削除
+  sessionResults.pop();
+  loadTurn(currentTurnIndex);
+}
+
+/** 次のターンへ */
+function nextTurn() {
+  const lastResult = sessionResults[sessionResults.length - 1];
+  const judgment = lastResult ? lastResult.judgment : 'wrong';
+
+  // next分岐
+  if (currentTurn.next) {
+    const nextId = currentTurn.next[judgment] || currentTurn.next.correct;
+    if (nextId) {
+      // IDでターンを探す
+      const nextIndex = currentLesson.turns.findIndex(t => t.id === nextId);
+      if (nextIndex >= 0) {
+        loadTurn(nextIndex);
+        return;
+      }
+    }
+  }
+
+  // 分岐先がなければ次のインデックスへ
+  loadTurn(currentTurnIndex + 1);
+}
+
+// ============================================================
+// ■ レッスン完了
+// ============================================================
+function finishLesson() {
+  stopTimer();
+  updateStreak();
+
+  // 履歴保存
+  const history = loadData(STORAGE_KEYS.history, []);
+  history.push({
+    lessonId: currentLesson.lessonId,
+    title: currentLesson.title,
+    date: new Date().toISOString(),
+    results: sessionResults
+  });
+  saveData(STORAGE_KEYS.history, history);
+
+  // 進捗更新
+  if (!isReviewMode) {
+    const progress = loadData(STORAGE_KEYS.progress, {});
+    const correctCount = sessionResults.filter(r => r.judgment === 'correct').length;
+    progress[currentLesson.lessonId] = {
+      correctCount: correctCount,
+      totalCount: sessionResults.length,
+      lastDate: new Date().toISOString()
+    };
+    saveData(STORAGE_KEYS.progress, progress);
+  }
+
+  // 結果画面描画
+  renderResultScreen();
+  showScreen('screen-result');
+}
+
+function renderResultScreen() {
+  const total = sessionResults.length;
+  const correct = sessionResults.filter(r => r.judgment === 'correct').length;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+  document.getElementById('result-pct').textContent = pct + '%';
+  document.getElementById('result-circle').style.setProperty('--pct', pct + '%');
+  document.getElementById('result-summary-text').textContent =
+    `${total}問中 ${correct}問正解`;
+
+  const list = document.getElementById('result-detail-list');
+  list.innerHTML = '';
+  sessionResults.forEach(r => {
+    const cls = r.judgment === 'correct' ? 'c' : r.judgment === 'close' ? 'cl' : 'w';
+    const label = r.judgment === 'correct' ? '正解' : r.judgment === 'close' ? '惜しい' : '不正解';
+    const div = document.createElement('div');
+    div.className = 'result-detail-item';
+    div.innerHTML = `
+      <span class="badge ${cls}">${label}</span>
+      <span class="q">${r.promptText}</span>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function replayLesson() {
+  if (currentLesson && currentLesson.lessonId !== 'review-session') {
+    startLesson(currentLesson.lessonId);
+  } else {
+    startReview();
+  }
+}
+
+function confirmExit() {
+  if (sessionResults.length > 0) {
+    if (confirm('レッスンを中断しますか？進捗は保存されません。')) {
+      stopTimer();
+      stopRecordingIfActive();
+      showScreen('screen-home');
+    }
+  } else {
+    showScreen('screen-home');
+  }
+}
+
+// ============================================================
+// ■ 復習キュー
+// ============================================================
+function addToReviewQueue(turn, lessonId) {
+  const review = loadData(STORAGE_KEYS.review, []);
+  // 重複チェック
+  if (review.some(r => r.turnId === turn.id)) return;
+  review.push({
+    turnId: turn.id,
+    lessonId: lessonId,
+    turn: turn,
+    addedDate: new Date().toISOString()
+  });
+  saveData(STORAGE_KEYS.review, review);
+}
+
+function removeFromReviewQueue(turnId) {
+  let review = loadData(STORAGE_KEYS.review, []);
+  review = review.filter(r => r.turnId !== turnId);
+  saveData(STORAGE_KEYS.review, review);
+}
+
+function renderReviewList() {
+  const review = loadData(STORAGE_KEYS.review, []);
+  const container = document.getElementById('review-list');
+  const emptyEl = document.getElementById('review-empty');
+  const startBtn = document.getElementById('review-start-btn');
+
+  container.innerHTML = '';
+
+  if (review.length === 0) {
+    emptyEl.style.display = '';
+    startBtn.style.display = 'none';
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+  startBtn.style.display = '';
+
+  review.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    div.innerHTML = `
+      <div class="q-text">${item.turn.promptText}</div>
+      <button class="remove-btn" onclick="removeReviewItem('${item.turnId}')" title="削除">✕</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function removeReviewItem(turnId) {
+  removeFromReviewQueue(turnId);
+  renderReviewList();
+  showToast('復習リストから削除しました');
+}
+
+// ============================================================
+// ■ データリセット
+// ============================================================
+function resetAllData() {
+  if (!confirm('すべての学習データを削除しますか？\nこの操作は取り消せません。')) return;
+  Object.values(STORAGE_KEYS).forEach(k => localStorage.removeItem(k));
+  appSettings = { ...DEFAULT_SETTINGS };
+  showToast('データをリセットしました');
+  showScreen('screen-home');
+}
+
+// ============================================================
+// ■ ユーティリティ
+// ============================================================
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// ■ 初期化
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  loadLessons();
+  loadSettingsUI();
+  refreshHomeStats();
+  isTextInputMode = false;
+});
+</script>
+
+</body>
+</html>
