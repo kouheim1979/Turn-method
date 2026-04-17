@@ -7,7 +7,7 @@
 <title>ターンメソッド - 英語発話トレーニング</title>
 <style>
 /* ========================================
-   ターンメソッド CSS v2
+   ターンメソッド CSS
    Safari-safe, high-contrast, mobile-first
    ======================================== */
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
@@ -77,12 +77,10 @@ from { opacity: 0; transform: translateY(6px); }
 to { opacity: 1; transform: translateY(0); }
 }
 
-/* — Header — */
+/* Header */
 .header {
-display: -webkit-flex;
-display: flex;
--webkit-align-items: center;
-align-items: center;
+display: -webkit-flex; display: flex;
+-webkit-align-items: center; align-items: center;
 gap: 12px;
 padding: 16px 0 20px;
 }
@@ -93,19 +91,14 @@ background: var(–bg-card);
 border-radius: 12px;
 font-size: 20px;
 cursor: pointer;
-display: -webkit-flex;
-display: flex;
--webkit-align-items: center;
-align-items: center;
--webkit-justify-content: center;
-justify-content: center;
+display: -webkit-flex; display: flex;
+-webkit-align-items: center; align-items: center;
+-webkit-justify-content: center; justify-content: center;
 color: var(–text);
--webkit-appearance: none;
-appearance: none;
+-webkit-appearance: none; appearance: none;
 }
 .header .back-btn:active {
--webkit-transform: scale(0.92);
-transform: scale(0.92);
+-webkit-transform: scale(0.92); transform: scale(0.92);
 }
 .header h1 {
 font-size: 18px;
@@ -113,7 +106,7 @@ font-weight: 700;
 color: var(–text);
 }
 
-/* — Card — */
+/* Card */
 .card {
 background: var(–bg-card);
 border-radius: var(–radius);
@@ -123,14 +116,11 @@ box-shadow: var(–shadow);
 border: 1px solid rgba(0,0,0,0.04);
 }
 
-/* — Buttons — */
+/* Buttons */
 .btn {
-display: -webkit-inline-flex;
-display: inline-flex;
--webkit-align-items: center;
-align-items: center;
--webkit-justify-content: center;
-justify-content: center;
+display: -webkit-inline-flex; display: inline-flex;
+-webkit-align-items: center; align-items: center;
+-webkit-justify-content: center; justify-content: center;
 gap: 8px;
 padding: 14px 28px;
 border: none;
@@ -139,17 +129,14 @@ font-family: var(–font-jp);
 font-size: 16px;
 font-weight: 600;
 cursor: pointer;
--webkit-transition: transform 0.12s;
-transition: transform 0.12s;
+-webkit-transition: transform 0.12s; transition: transform 0.12s;
 width: 100%;
--webkit-appearance: none;
-appearance: none;
+-webkit-appearance: none; appearance: none;
 text-decoration: none;
 line-height: 1.4;
 }
 .btn:active {
--webkit-transform: scale(0.96);
-transform: scale(0.96);
+-webkit-transform: scale(0.96); transform: scale(0.96);
 }
 .btn-primary {
 background: var(–accent);
@@ -165,7 +152,7 @@ border: 2px solid var(–border);
 .btn-sm { padding: 10px 18px; font-size: 14px; }
 .btn + .btn { margin-top: 10px; }
 
-/* — Home — */
+/* Home */
 .home-hero {
 text-align: center;
 padding: 36px 0 20px;
@@ -188,14 +175,12 @@ font-size: 14px;
 line-height: 1.7;
 }
 .home-stats {
-display: -webkit-flex;
-display: flex;
+display: -webkit-flex; display: flex;
 gap: 10px;
 margin: 20px 0;
 }
 .stat-box {
--webkit-flex: 1;
-flex: 1;
+-webkit-flex: 1; flex: 1;
 background: var(–bg-card);
 border-radius: var(–radius-sm);
 padding: 14px 8px;
@@ -217,7 +202,7 @@ font-weight: 500;
 }
 .home-nav { margin-top: 16px; }
 
-/* — Lesson List — */
+/* Lesson List */
 .lesson-item {
 background: var(–bg-card);
 border-radius: var(–radius);
@@ -226,29 +211,22 @@ margin-bottom: 10px;
 box-shadow: var(–shadow);
 border: 1px solid rgba(0,0,0,0.04);
 cursor: pointer;
-display: -webkit-flex;
-display: flex;
--webkit-align-items: center;
-align-items: center;
+display: -webkit-flex; display: flex;
+-webkit-align-items: center; align-items: center;
 gap: 14px;
 }
 .lesson-item:active {
--webkit-transform: scale(0.98);
-transform: scale(0.98);
+-webkit-transform: scale(0.98); transform: scale(0.98);
 }
 .lesson-item .icon {
 width: 46px; height: 46px;
 border-radius: 12px;
 background: var(–accent-bg);
-display: -webkit-flex;
-display: flex;
--webkit-align-items: center;
-align-items: center;
--webkit-justify-content: center;
-justify-content: center;
+display: -webkit-flex; display: flex;
+-webkit-align-items: center; align-items: center;
+-webkit-justify-content: center; justify-content: center;
 font-size: 22px;
--webkit-flex-shrink: 0;
-flex-shrink: 0;
+-webkit-flex-shrink: 0; flex-shrink: 0;
 }
 .lesson-item .info { -webkit-flex: 1; flex: 1; }
 .lesson-item .info .title {
@@ -272,18 +250,15 @@ border-radius: 20px;
 border: 1px solid rgba(27,127,55,0.15);
 }
 
-/* — Lesson Play — */
+/* Lesson Play */
 .lesson-progress {
-display: -webkit-flex;
-display: flex;
--webkit-align-items: center;
-align-items: center;
+display: -webkit-flex; display: flex;
+-webkit-align-items: center; align-items: center;
 gap: 10px;
 margin-bottom: 20px;
 }
 .progress-bar-bg {
--webkit-flex: 1;
-flex: 1;
+-webkit-flex: 1; flex: 1;
 height: 8px;
 background: var(–border);
 border-radius: 4px;
@@ -293,8 +268,7 @@ overflow: hidden;
 height: 100%;
 background: var(–accent);
 border-radius: 4px;
--webkit-transition: width 0.4s ease;
-transition: width 0.4s ease;
+-webkit-transition: width 0.4s ease; transition: width 0.4s ease;
 }
 .progress-text {
 font-family: var(–font-en);
@@ -312,14 +286,10 @@ box-shadow: var(–shadow-lg);
 border: 1px solid rgba(0,0,0,0.04);
 text-align: center;
 min-height: 240px;
-display: -webkit-flex;
-display: flex;
--webkit-flex-direction: column;
-flex-direction: column;
--webkit-align-items: center;
-align-items: center;
--webkit-justify-content: center;
-justify-content: center;
+display: -webkit-flex; display: flex;
+-webkit-flex-direction: column; flex-direction: column;
+-webkit-align-items: center; align-items: center;
+-webkit-justify-content: center; justify-content: center;
 }
 
 /* Countdown */
@@ -402,10 +372,8 @@ color: var(–text);
 background: var(–bg-card);
 resize: none;
 outline: none;
--webkit-transition: border-color 0.2s;
-transition: border-color 0.2s;
--webkit-appearance: none;
-appearance: none;
+-webkit-transition: border-color 0.2s; transition: border-color 0.2s;
+-webkit-appearance: none; appearance: none;
 }
 .answer-area textarea:focus {
 border-color: var(–accent);
@@ -421,18 +389,13 @@ font-size: 28px;
 cursor: pointer;
 box-shadow: 0 4px 18px rgba(212,81,30,0.30);
 margin: 8px auto;
-display: -webkit-flex;
-display: flex;
--webkit-align-items: center;
-align-items: center;
--webkit-justify-content: center;
-justify-content: center;
--webkit-appearance: none;
-appearance: none;
+display: -webkit-flex; display: flex;
+-webkit-align-items: center; align-items: center;
+-webkit-justify-content: center; justify-content: center;
+-webkit-appearance: none; appearance: none;
 }
 .mic-btn:active {
--webkit-transform: scale(0.9);
-transform: scale(0.9);
+-webkit-transform: scale(0.9); transform: scale(0.9);
 }
 .mic-btn.recording {
 background: var(–wrong);
@@ -516,8 +479,7 @@ font-weight: 500;
 }
 
 .action-row {
-display: -webkit-flex;
-display: flex;
+display: -webkit-flex; display: flex;
 gap: 10px;
 margin-top: 14px;
 width: 100%;
@@ -531,7 +493,7 @@ text-align: center;
 margin-top: 4px;
 }
 
-/* — Summary Result Screen — */
+/* Summary Result */
 .result-summary {
 text-align: center;
 padding: 20px 0;
@@ -539,12 +501,9 @@ padding: 20px 0;
 .result-circle {
 width: 140px; height: 140px;
 border-radius: 50%;
-display: -webkit-flex;
-display: flex;
--webkit-align-items: center;
-align-items: center;
--webkit-justify-content: center;
-justify-content: center;
+display: -webkit-flex; display: flex;
+-webkit-align-items: center; align-items: center;
+-webkit-justify-content: center; justify-content: center;
 margin: 0 auto 16px;
 position: relative;
 background: var(–border);
@@ -553,14 +512,10 @@ background: var(–border);
 width: 110px; height: 110px;
 border-radius: 50%;
 background: var(–bg-card);
-display: -webkit-flex;
-display: flex;
--webkit-align-items: center;
-align-items: center;
--webkit-justify-content: center;
-justify-content: center;
--webkit-flex-direction: column;
-flex-direction: column;
+display: -webkit-flex; display: flex;
+-webkit-align-items: center; align-items: center;
+-webkit-justify-content: center; justify-content: center;
+-webkit-flex-direction: column; flex-direction: column;
 }
 .result-circle-inner .big {
 font-family: var(–font-en);
@@ -575,10 +530,8 @@ font-weight: 500;
 }
 .result-detail-list { margin: 16px 0; }
 .result-detail-item {
-display: -webkit-flex;
-display: flex;
--webkit-align-items: center;
-align-items: center;
+display: -webkit-flex; display: flex;
+-webkit-align-items: center; align-items: center;
 gap: 10px;
 padding: 10px 14px;
 background: var(–bg-card);
@@ -593,20 +546,18 @@ padding: 3px 10px;
 border-radius: 20px;
 font-size: 12px;
 font-weight: 600;
--webkit-flex-shrink: 0;
-flex-shrink: 0;
+-webkit-flex-shrink: 0; flex-shrink: 0;
 }
 .result-detail-item .badge.c { background: var(–correct-bg); color: var(–correct-text); }
 .result-detail-item .badge.cl { background: var(–close-bg); color: var(–close-text); }
 .result-detail-item .badge.w { background: var(–wrong-bg); color: var(–wrong-text); }
 .result-detail-item .q {
--webkit-flex: 1;
-flex: 1;
+-webkit-flex: 1; flex: 1;
 font-family: var(–font-en);
 color: var(–text);
 }
 
-/* — Review — */
+/* Review */
 .review-item {
 background: var(–bg-card);
 border-radius: var(–radius);
@@ -614,15 +565,12 @@ padding: 14px 16px;
 margin-bottom: 10px;
 box-shadow: var(–shadow);
 border: 1px solid rgba(0,0,0,0.04);
-display: -webkit-flex;
-display: flex;
--webkit-align-items: center;
-align-items: center;
+display: -webkit-flex; display: flex;
+-webkit-align-items: center; align-items: center;
 gap: 12px;
 }
 .review-item .q-text {
--webkit-flex: 1;
-flex: 1;
+-webkit-flex: 1; flex: 1;
 font-family: var(–font-en);
 font-size: 14px;
 color: var(–text);
@@ -634,8 +582,7 @@ color: var(–text-sub);
 font-size: 18px;
 cursor: pointer;
 padding: 4px 8px;
--webkit-appearance: none;
-appearance: none;
+-webkit-appearance: none; appearance: none;
 }
 .empty-state {
 text-align: center;
@@ -644,18 +591,20 @@ color: var(–text-sub);
 }
 .empty-state .es-icon { font-size: 48px; margin-bottom: 12px; display: block; }
 
-/* — Settings — */
+/* Settings */
 .setting-row {
-display: -webkit-flex;
-display: flex;
--webkit-align-items: center;
-align-items: center;
--webkit-justify-content: space-between;
-justify-content: space-between;
+display: -webkit-flex; display: flex;
+-webkit-align-items: center; align-items: center;
+-webkit-justify-content: space-between; justify-content: space-between;
 padding: 14px 0;
 border-bottom: 1px solid var(–border);
+gap: 12px;
 }
 .setting-row:last-child { border-bottom: none; }
+.setting-row .setting-label {
+-webkit-flex: 1; flex: 1;
+min-width: 0;
+}
 .setting-row .label {
 font-size: 15px;
 color: var(–text);
@@ -674,14 +623,14 @@ border: 1px solid var(–border);
 border-radius: 8px;
 background: var(–bg);
 color: var(–text);
--webkit-appearance: none;
-appearance: none;
+-webkit-appearance: none; appearance: none;
 }
 .setting-row select {
 padding-right: 24px;
 background-image: url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘12’%3E%3Cpath d=‘M2 4l4 4 4-4’ fill=‘none’ stroke=’%235C4A3A’ stroke-width=‘2’/%3E%3C/svg%3E”);
 background-repeat: no-repeat;
 background-position: right 8px center;
+max-width: 140px;
 }
 .setting-row input[type=“range”] {
 width: 120px;
@@ -705,12 +654,9 @@ background: var(–border);
 border: none;
 position: relative;
 cursor: pointer;
--webkit-transition: background 0.2s;
-transition: background 0.2s;
--webkit-appearance: none;
-appearance: none;
--webkit-flex-shrink: 0;
-flex-shrink: 0;
+-webkit-transition: background 0.2s; transition: background 0.2s;
+-webkit-appearance: none; appearance: none;
+-webkit-flex-shrink: 0; flex-shrink: 0;
 }
 .toggle.on { background: var(–correct); }
 .toggle::after {
@@ -720,22 +666,19 @@ border-radius: 50%;
 background: #FFFFFF;
 position: absolute;
 top: 3px; left: 3px;
--webkit-transition: -webkit-transform 0.2s;
-transition: transform 0.2s;
+-webkit-transition: -webkit-transform 0.2s; transition: transform 0.2s;
 box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
 .toggle.on::after {
--webkit-transform: translateX(24px);
-transform: translateX(24px);
+-webkit-transform: translateX(24px); transform: translateX(24px);
 }
 
-/* — Toast — */
+/* Toast */
 .toast {
 position: fixed;
 bottom: 80px;
 left: 50%;
--webkit-transform: translateX(-50%);
-transform: translateX(-50%);
+-webkit-transform: translateX(-50%); transform: translateX(-50%);
 background: var(–text);
 color: #FFFFFF;
 padding: 10px 24px;
@@ -743,8 +686,7 @@ border-radius: 30px;
 font-size: 14px;
 z-index: 100;
 opacity: 0;
--webkit-transition: opacity 0.3s;
-transition: opacity 0.3s;
+-webkit-transition: opacity 0.3s; transition: opacity 0.3s;
 pointer-events: none;
 max-width: 90%;
 text-align: center;
@@ -760,7 +702,7 @@ text-align: center;
 
 <div class="app-container" id="app">
 
-  <!-- ===== ホーム画面 ===== -->
+  <!-- ホーム画面 -->
 
   <div class="screen active" id="screen-home">
     <div class="home-hero">
@@ -780,7 +722,7 @@ text-align: center;
     </div>
   </div>
 
-  <!-- ===== レッスン一覧画面 ===== -->
+  <!-- レッスン一覧画面 -->
 
   <div class="screen" id="screen-lessons">
     <div class="header">
@@ -791,7 +733,7 @@ text-align: center;
     <div class="bottom-spacer"></div>
   </div>
 
-  <!-- ===== レッスン実行画面 ===== -->
+  <!-- レッスン実行画面 -->
 
   <div class="screen" id="screen-play">
     <div class="header">
@@ -852,7 +794,7 @@ text-align: center;
 
   </div>
 
-  <!-- ===== 結果画面 ===== -->
+  <!-- 結果画面 -->
 
   <div class="screen" id="screen-result">
     <div class="header">
@@ -874,7 +816,7 @@ text-align: center;
     <div class="bottom-spacer"></div>
   </div>
 
-  <!-- ===== 復習一覧画面 ===== -->
+  <!-- 復習一覧画面 -->
 
   <div class="screen" id="screen-review">
     <div class="header">
@@ -890,7 +832,7 @@ text-align: center;
     <div class="bottom-spacer"></div>
   </div>
 
-  <!-- ===== 設定画面 ===== -->
+  <!-- 設定画面 -->
 
   <div class="screen" id="screen-settings">
     <div class="header">
@@ -899,27 +841,27 @@ text-align: center;
     </div>
     <div class="card">
       <div class="setting-row">
-        <div><div class="label">読み上げ速度</div><div class="sub">TTS速度を調整</div></div>
+        <div class="setting-label"><div class="label">読み上げ速度</div><div class="sub">TTS速度を調整</div></div>
         <input type="range" min="0.5" max="1.5" step="0.1" value="0.9" id="set-tts-speed" onchange="saveSetting('ttsSpeed', this.value)">
       </div>
       <div class="setting-row">
-        <div><div class="label">自動読み上げ</div><div class="sub">問題文を自動で読み上げる</div></div>
+        <div class="setting-label"><div class="label">自動読み上げ</div><div class="sub">問題文を自動で読み上げる</div></div>
         <button class="toggle on" id="set-auto-tts" onclick="toggleSetting(this, 'autoTTS')"></button>
       </div>
       <div class="setting-row">
-        <div><div class="label">テキスト入力モード</div><div class="sub">常にテキスト入力を使う</div></div>
+        <div class="setting-label"><div class="label">テキスト入力モード</div><div class="sub">常にテキスト入力を使う</div></div>
         <button class="toggle" id="set-text-mode" onclick="toggleSetting(this, 'textMode')"></button>
       </div>
       <div class="setting-row">
-        <div><div class="label">制限時間</div><div class="sub">回答の制限時間を有効化</div></div>
+        <div class="setting-label"><div class="label">制限時間</div><div class="sub">回答の制限時間を有効化</div></div>
         <button class="toggle on" id="set-timer" onclick="toggleSetting(this, 'timerEnabled')"></button>
       </div>
       <div class="setting-row">
-        <div><div class="label">カウントダウン</div><div class="sub">問題前の3-2-1表示</div></div>
+        <div class="setting-label"><div class="label">カウントダウン</div><div class="sub">問題前の3-2-1表示</div></div>
         <button class="toggle on" id="set-countdown" onclick="toggleSetting(this, 'countdownEnabled')"></button>
       </div>
       <div class="setting-row">
-        <div><div class="label">TTS音声</div><div class="sub">読み上げの声を選択</div></div>
+        <div class="setting-label"><div class="label">TTS音声</div><div class="sub">読み上げの声を選択</div></div>
         <select id="set-voice" onchange="saveSetting('voiceName', this.value)">
           <option value="">デフォルト</option>
         </select>
@@ -927,7 +869,7 @@ text-align: center;
     </div>
     <div class="card" style="margin-top:14px">
       <div class="setting-row">
-        <div><div class="label">学習データをリセット</div><div class="sub">すべての履歴・進捗を削除</div></div>
+        <div class="setting-label"><div class="label">学習データをリセット</div><div class="sub">すべての履歴・進捗を削除</div></div>
         <button class="btn btn-sm" style="background:var(--wrong-bg);color:var(--wrong-text);width:auto;border:1px solid rgba(196,43,43,0.2)" onclick="resetAllData()">リセット</button>
       </div>
     </div>
@@ -940,7 +882,7 @@ text-align: center;
 
 <script>
 /* ========================================
-   ターンメソッド メインJS v2
+   ターンメソッド メインJS
    カウントダウン式テンポ + Safari対策
    JSON駆動レッスンランナー
    ======================================== */
@@ -1126,7 +1068,7 @@ var EMBEDDED_LESSONS = [
           "i usually wake up at *", "i wake up at *",
           "i get up at *", "around *", "at * o'clock", "about *"
         ],
-        hint: "I usually wake up at ○○. と答えましょう",
+        hint: "I usually wake up at XXX と答えましょう",
         timeLimitSec: 12,
         next: { correct: "u004", close: "u004", wrong: "u003" }
       },
@@ -1383,7 +1325,6 @@ var isReviewMode = false;
 var isTextInputMode = false;
 var countdownInterval = null;
 
-/** レッスン開始 */
 function startLesson(lessonId) {
   currentLesson = findLesson(lessonId);
   if (!currentLesson) {
@@ -1398,7 +1339,6 @@ function startLesson(lessonId) {
   beginTurn(0);
 }
 
-/** 復習モードで開始 */
 function startReview() {
   var review = loadData(STORAGE_KEYS.review, []);
   if (review.length === 0) {
@@ -1420,7 +1360,6 @@ function startReview() {
   beginTurn(0);
 }
 
-/** ターン開始（カウントダウン -> 問題 -> 回答） */
 function beginTurn(index) {
   if (!currentLesson) return;
   if (index >= currentLesson.turns.length) {
@@ -1452,7 +1391,6 @@ function updateProgress() {
   document.getElementById('play-progress-text').textContent = current + '/' + total;
 }
 
-/** フェーズ表示切替 */
 function setPhase(phaseName) {
   var phases = ['countdown', 'prompt', 'answer', 'result'];
   for (var i = 0; i < phases.length; i++) {
@@ -1491,11 +1429,11 @@ function showCountdown(onComplete) {
   }, 700);
 }
 
-/** Safari対応: アニメーション再トリガー */
+// Safari対応: アニメーション再トリガー
 function reanimateEl(el) {
   el.style.webkitAnimation = 'none';
   el.style.animation = 'none';
-  void el.offsetHeight; // reflow
+  void el.offsetHeight;
   el.style.webkitAnimation = '';
   el.style.animation = '';
 }
@@ -1514,7 +1452,6 @@ function showPromptPhase() {
       }, 300);
     });
   } else {
-    // TTS無効: 1.5秒表示して回答フェーズへ
     setTimeout(function() {
       enterAnswerPhase();
     }, 1500);
@@ -1551,7 +1488,6 @@ function enterAnswerPhase() {
     document.getElementById('input-mode-btn').classList.remove('hidden');
     document.getElementById('input-mode-btn').innerHTML = '&#x2328;&#xFE0F; テキストで入力';
     isTextInputMode = false;
-    // ターンメソッドのテンポ: 質問後すぐ録音開始
     setTimeout(function() {
       startRecording();
     }, 200);
@@ -1636,7 +1572,6 @@ function startRecording() {
     return;
   }
 
-  // 既に録音中なら無視
   if (isRecording) return;
 
   var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1674,8 +1609,6 @@ function startRecording() {
     console.warn('音声認識エラー:', event.error);
     if (event.error === 'not-allowed') {
       showToast('マイクの使用が許可されていません');
-    } else if (event.error === 'aborted' || event.error === 'no-speech') {
-      // 無音・中断は静かに処理
     }
     stopRecordingIfActive();
   };
@@ -1730,7 +1663,7 @@ function speak(text, onEnd) {
     }
   }
 
-  // Safari対策: onendが発火しないことがあるためフォールバックタイマーを設置
+  // Safari対策: onendフォールバック
   var callbackFired = false;
   var safeCallback = function() {
     if (callbackFired) return;
@@ -1738,9 +1671,6 @@ function speak(text, onEnd) {
     if (onEnd) onEnd();
   };
 
-  utter.onend = safeCallback;
-
-  // フォールバック: テキスト長から推定した最大待機時間
   var estimatedMs = Math.max(2500, text.length * 100);
   var fallbackTimer = setTimeout(safeCallback, estimatedMs);
 
@@ -1820,21 +1750,15 @@ function editDistance(a, b) {
   return dp[m][n];
 }
 
-/**
- * 回答を判定する
- * @returns {string} 'correct' | 'close' | 'wrong'
- */
 function judgeAnswer(userAnswer, turn) {
   if (!userAnswer || userAnswer.trim() === '') return 'wrong';
 
   var variants = turn.acceptedVariants || [];
 
-  // 1. パターンマッチ（完全一致 or ワイルドカード）
   for (var i = 0; i < variants.length; i++) {
     if (matchPattern(variants[i], userAnswer)) return 'correct';
   }
 
-  // 2. 編集距離で「惜しい」判定
   var normUser = normalize(userAnswer);
   for (var j = 0; j < variants.length; j++) {
     if (variants[j].indexOf('*') !== -1) continue;
@@ -1868,14 +1792,12 @@ function submitAnswer() {
     timestamp: Date.now()
   });
 
-  // 不正解・惜しい -> 復習キュー登録
   if (judgment !== 'correct') {
     addToReviewQueue(currentTurn, currentLesson.lessonId);
   } else {
     removeFromReviewQueue(currentTurn.id);
   }
 
-  // 判定結果UI
   setPhase('result');
   var badge = document.getElementById('result-badge');
   badge.className = 'result-badge ' + judgment;
@@ -1890,7 +1812,6 @@ function submitAnswer() {
   document.getElementById('result-user-answer').textContent = userAnswer || '(未回答)';
   document.getElementById('result-correct-answer').textContent = currentTurn.expectedAnswerDisplay;
 
-  // 不正解時にヒント表示
   var hintEl = document.getElementById('result-hint');
   if (judgment !== 'correct' && currentTurn.hint) {
     hintEl.textContent = '\uD83D\uDCA1 ' + currentTurn.hint;
@@ -1900,13 +1821,11 @@ function submitAnswer() {
   }
 }
 
-/** もう一度（同じターン） */
 function retryTurn() {
   sessionResults.pop();
   beginTurn(currentTurnIndex);
 }
 
-/** 次のターンへ（next分岐対応） */
 function nextTurn() {
   var lastResult = sessionResults[sessionResults.length - 1];
   var judgment = lastResult ? lastResult.judgment : 'wrong';
@@ -1971,7 +1890,6 @@ function renderResultScreen() {
 
   document.getElementById('result-pct').textContent = pct + '%';
 
-  // Safari対応 conic-gradient (Safari 12.1+対応)
   var circleEl = document.getElementById('result-circle');
   try {
     circleEl.style.background = 'conic-gradient(#1B7F37 ' + pct + '%, #D9CCBF ' + pct + '%)';
@@ -2014,8 +1932,6 @@ function confirmExit() {
   if (sessionResults.length > 0) {
     if (confirm('レッスンを中断しますか？\n進捗は保存されません。')) {
       showScreen('screen-home');
-    } else {
-      // キャンセルされた場合、タイマー等は復帰しない（安全側に倒す）
     }
   } else {
     showScreen('screen-home');
@@ -2028,7 +1944,7 @@ function confirmExit() {
 function addToReviewQueue(turn, lessonId) {
   var review = loadData(STORAGE_KEYS.review, []);
   for (var i = 0; i < review.length; i++) {
-    if (review[i].turnId === turn.id) return; // 重複防止
+    if (review[i].turnId === turn.id) return;
   }
   review.push({
     turnId: turn.id,
