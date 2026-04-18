@@ -328,10 +328,29 @@ margin-bottom: 8px;
 font-family: var(–font-en);
 color: var(–text);
 }
+.prompt-hidden-text {
+font-size: 36px;
+letter-spacing: 8px;
+color: var(–text-sub);
+margin-bottom: 8px;
+font-family: var(–font-en);
+}
 .prompt-sub {
 font-size: 14px;
 color: var(–text-sub);
 margin-top: 8px;
+}
+.listen-only-badge {
+display: inline-block;
+background: var(–accent-bg);
+color: var(–accent);
+font-size: 11px;
+font-weight: 600;
+padding: 3px 10px;
+border-radius: 12px;
+margin-bottom: 8px;
+border: 1px solid rgba(212,81,30,0.2);
+letter-spacing: 0.05em;
 }
 
 /* Answer */
@@ -592,6 +611,15 @@ color: var(–text-sub);
 .empty-state .es-icon { font-size: 48px; margin-bottom: 12px; display: block; }
 
 /* Settings */
+.section-header {
+font-size: 12px;
+font-weight: 700;
+color: var(–accent);
+letter-spacing: 0.05em;
+margin: 10px 4px 8px;
+text-transform: uppercase;
+}
+
 .setting-row {
 display: -webkit-flex; display: flex;
 -webkit-align-items: center; align-items: center;
@@ -673,6 +701,18 @@ box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 -webkit-transform: translateX(24px); transform: translateX(24px);
 }
 
+.tts-status-badge {
+display: inline-block;
+padding: 3px 10px;
+border-radius: 12px;
+font-size: 11px;
+font-weight: 600;
+margin-left: 6px;
+}
+.tts-status-badge.ok { background: var(–correct-bg); color: var(–correct-text); }
+.tts-status-badge.ng { background: var(–wrong-bg); color: var(–wrong-text); }
+.tts-status-badge.unknown { background: var(–bg-card-alt); color: var(–text-sub); }
+
 /* Toast */
 .toast {
 position: fixed;
@@ -716,7 +756,7 @@ text-align: center;
       <div class="stat-box"><div class="num" id="stat-streak">0</div><div class="label">連続日数</div></div>
     </div>
     <div class="home-nav">
-      <button class="btn btn-primary" onclick="showScreen('screen-lessons')">&#x1F4DA; レッスンを始める</button>
+      <button class="btn btn-primary" onclick="onStartLessonsClick()">&#x1F4DA; レッスンを始める</button>
       <button class="btn btn-secondary" onclick="showScreen('screen-review')">&#x1F504; 復習する <span id="review-count-badge"></span></button>
       <button class="btn btn-secondary" onclick="showScreen('screen-settings')">&#x2699;&#xFE0F; 設定</button>
     </div>
@@ -754,7 +794,9 @@ text-align: center;
 
 <!-- フェーズ: 問題読み上げ中 -->
 <div id="phase-prompt" class="turn-card hidden">
+  <div class="listen-only-badge hidden" id="listen-only-badge">&#x1F3A7; LISTEN ONLY</div>
   <div class="turn-prompt" id="prompt-text"></div>
+  <div class="prompt-hidden-text hidden" id="prompt-hidden-mask">&#x2022; &#x2022; &#x2022;</div>
   <div class="prompt-sub">&#x1F50A; 読み上げ中...</div>
 </div>
 
@@ -828,7 +870,7 @@ text-align: center;
       <span class="es-icon">&#x2728;</span>
       <p>復習する問題はありません！<br>素晴らしい！</p>
     </div>
-    <button class="btn btn-primary hidden" id="review-start-btn" onclick="startReview()">&#x1F504; 復習を開始する</button>
+    <button class="btn btn-primary hidden" id="review-start-btn" onclick="onStartReviewClick()">&#x1F504; 復習を開始する</button>
     <div class="bottom-spacer"></div>
   </div>
 
@@ -839,41 +881,92 @@ text-align: center;
       <button class="back-btn" onclick="showScreen('screen-home')">&#x2190;</button>
       <h1>設定</h1>
     </div>
-    <div class="card">
-      <div class="setting-row">
-        <div class="setting-label"><div class="label">読み上げ速度</div><div class="sub">TTS速度を調整</div></div>
-        <input type="range" min="0.5" max="1.5" step="0.1" value="0.9" id="set-tts-speed" onchange="saveSetting('ttsSpeed', this.value)">
-      </div>
-      <div class="setting-row">
-        <div class="setting-label"><div class="label">自動読み上げ</div><div class="sub">問題文を自動で読み上げる</div></div>
-        <button class="toggle on" id="set-auto-tts" onclick="toggleSetting(this, 'autoTTS')"></button>
-      </div>
-      <div class="setting-row">
-        <div class="setting-label"><div class="label">テキスト入力モード</div><div class="sub">常にテキスト入力を使う</div></div>
-        <button class="toggle" id="set-text-mode" onclick="toggleSetting(this, 'textMode')"></button>
-      </div>
-      <div class="setting-row">
-        <div class="setting-label"><div class="label">制限時間</div><div class="sub">回答の制限時間を有効化</div></div>
-        <button class="toggle on" id="set-timer" onclick="toggleSetting(this, 'timerEnabled')"></button>
-      </div>
-      <div class="setting-row">
-        <div class="setting-label"><div class="label">カウントダウン</div><div class="sub">問題前の3-2-1表示</div></div>
-        <button class="toggle on" id="set-countdown" onclick="toggleSetting(this, 'countdownEnabled')"></button>
-      </div>
-      <div class="setting-row">
-        <div class="setting-label"><div class="label">TTS音声</div><div class="sub">読み上げの声を選択</div></div>
-        <select id="set-voice" onchange="saveSetting('voiceName', this.value)">
-          <option value="">デフォルト</option>
-        </select>
-      </div>
+
+```
+<div class="section-header">レッスン進行</div>
+<div class="card">
+  <div class="setting-row">
+    <div class="setting-label">
+      <div class="label">カウントダウン</div>
+      <div class="sub">問題前の3-2-1-Go!表示</div>
     </div>
-    <div class="card" style="margin-top:14px">
-      <div class="setting-row">
-        <div class="setting-label"><div class="label">学習データをリセット</div><div class="sub">すべての履歴・進捗を削除</div></div>
-        <button class="btn btn-sm" style="background:var(--wrong-bg);color:var(--wrong-text);width:auto;border:1px solid rgba(196,43,43,0.2)" onclick="resetAllData()">リセット</button>
-      </div>
+    <button class="toggle on" id="set-countdown" onclick="toggleSetting(this, 'countdownEnabled')"></button>
+  </div>
+  <div class="setting-row">
+    <div class="setting-label">
+      <div class="label">読み上げ文を画面に表示</div>
+      <div class="sub">OFFでリスニング訓練モード</div>
     </div>
-    <div class="bottom-spacer"></div>
+    <button class="toggle on" id="set-show-prompt" onclick="toggleSetting(this, 'showPromptText')"></button>
+  </div>
+  <div class="setting-row">
+    <div class="setting-label">
+      <div class="label">制限時間</div>
+      <div class="sub">回答の制限時間を有効化</div>
+    </div>
+    <button class="toggle on" id="set-timer" onclick="toggleSetting(this, 'timerEnabled')"></button>
+  </div>
+</div>
+
+<div class="section-header">
+  音声<span class="tts-status-badge unknown" id="tts-status">状態不明</span>
+</div>
+<div class="card">
+  <div class="setting-row">
+    <div class="setting-label">
+      <div class="label">自動読み上げ</div>
+      <div class="sub">問題文を自動で読み上げる</div>
+    </div>
+    <button class="toggle on" id="set-auto-tts" onclick="toggleSetting(this, 'autoTTS')"></button>
+  </div>
+  <div class="setting-row">
+    <div class="setting-label">
+      <div class="label">読み上げ速度</div>
+      <div class="sub">TTS速度を調整</div>
+    </div>
+    <input type="range" min="0.5" max="1.5" step="0.1" value="0.9" id="set-tts-speed" onchange="saveSetting('ttsSpeed', this.value)">
+  </div>
+  <div class="setting-row">
+    <div class="setting-label">
+      <div class="label">TTS音声</div>
+      <div class="sub">読み上げの声を選択</div>
+    </div>
+    <select id="set-voice" onchange="saveSetting('voiceName', this.value)">
+      <option value="">デフォルト</option>
+    </select>
+  </div>
+  <div class="setting-row" style="padding-top:8px">
+    <div class="setting-label">
+      <div class="label">音声テスト</div>
+      <div class="sub">タップして音が出るか確認</div>
+    </div>
+    <button class="btn btn-sm btn-primary" style="width:auto" onclick="testTTS()">&#x1F50A; テスト</button>
+  </div>
+</div>
+
+<div class="section-header">入力</div>
+<div class="card">
+  <div class="setting-row">
+    <div class="setting-label">
+      <div class="label">テキスト入力モード</div>
+      <div class="sub">常にテキスト入力を使う</div>
+    </div>
+    <button class="toggle" id="set-text-mode" onclick="toggleSetting(this, 'textMode')"></button>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <div class="setting-row">
+    <div class="setting-label">
+      <div class="label">学習データをリセット</div>
+      <div class="sub">すべての履歴・進捗を削除</div>
+    </div>
+    <button class="btn btn-sm" style="background:var(--wrong-bg);color:var(--wrong-text);width:auto;border:1px solid rgba(196,43,43,0.2)" onclick="resetAllData()">リセット</button>
+  </div>
+</div>
+<div class="bottom-spacer"></div>
+```
+
   </div>
 
 </div>
@@ -883,8 +976,7 @@ text-align: center;
 <script>
 /* ========================================
    ターンメソッド メインJS
-   カウントダウン式テンポ + Safari対策
-   JSON駆動レッスンランナー
+   カウントダウン式テンポ + Safari/iOS TTS対策
    ======================================== */
 
 // ============================================================
@@ -1142,7 +1234,8 @@ var DEFAULT_SETTINGS = {
   textMode: false,
   timerEnabled: true,
   voiceName: '',
-  countdownEnabled: true
+  countdownEnabled: true,
+  showPromptText: true  // NEW: 読み上げ文を画面に表示するか
 };
 
 var appSettings = {};
@@ -1174,7 +1267,9 @@ function loadSettingsUI() {
   setToggleState('set-text-mode', appSettings.textMode);
   setToggleState('set-timer', appSettings.timerEnabled);
   setToggleState('set-countdown', appSettings.countdownEnabled);
+  setToggleState('set-show-prompt', appSettings.showPromptText);
   populateVoices();
+  updateTtsStatusBadge();
 }
 
 function setToggleState(id, on) {
@@ -1185,6 +1280,7 @@ function setToggleState(id, on) {
 function populateVoices() {
   if (typeof speechSynthesis === 'undefined') return;
   var select = document.getElementById('set-voice');
+  if (!select) return;
   var voices = speechSynthesis.getVoices();
   var enVoices = voices.filter(function(v) { return v.lang.indexOf('en') === 0; });
   select.innerHTML = '<option value="">デフォルト</option>';
@@ -1295,7 +1391,7 @@ function renderLessonList() {
     var div = document.createElement('div');
     div.className = 'lesson-item';
     (function(lid) {
-      div.onclick = function() { startLesson(lid); };
+      div.onclick = function() { onLessonItemClick(lid); };
     })(lesson.lessonId);
     div.innerHTML =
       '<div class="icon">' + (lesson.icon || '\uD83D\uDCD6') + '</div>' +
@@ -1324,6 +1420,57 @@ var recognizedText = '';
 var isReviewMode = false;
 var isTextInputMode = false;
 var countdownInterval = null;
+
+// TTS状態管理
+var ttsUnlocked = false;       // ユーザー操作でTTSが解禁されたか
+var ttsWorking = null;         // null=未検証, true=動作確認済, false=鳴らない
+var lastTtsStartTime = 0;      // 直近のTTS開始時刻（ヘルスチェック用）
+
+/** ホームの「レッスンを始める」クリック時 */
+function onStartLessonsClick() {
+  // iOS Safariの制約: ユーザー操作直後にTTSをアンロック
+  unlockTts();
+  showScreen('screen-lessons');
+}
+
+/** レッスン一覧のアイテムクリック時 */
+function onLessonItemClick(lessonId) {
+  // ダブルアンロック（リスト→開始までの間にロックが戻らないように）
+  unlockTts();
+  startLesson(lessonId);
+}
+
+/** 復習開始クリック時 */
+function onStartReviewClick() {
+  unlockTts();
+  startReview();
+}
+
+// ============================================================
+// TTS アンロック（iOS Safari対策）
+// ユーザー操作直後に空のutteranceを投げて音声エンジンを起こす
+// ============================================================
+function unlockTts() {
+  if (typeof speechSynthesis === 'undefined') return;
+  if (ttsUnlocked) return;
+
+  try {
+    // 再開（iOSでpause状態になっていることがある）
+    if (speechSynthesis.paused) speechSynthesis.resume();
+
+    // 非常に短い無音テキストで音声エンジンを初期化
+    var warmup = new SpeechSynthesisUtterance(' ');
+    warmup.volume = 0;
+    warmup.rate = 1;
+    warmup.lang = 'en-US';
+    speechSynthesis.speak(warmup);
+
+    ttsUnlocked = true;
+    console.log('[TTS] Unlocked');
+  } catch (e) {
+    console.warn('[TTS] Unlock failed:', e);
+  }
+}
 
 function startLesson(lessonId) {
   currentLesson = findLesson(lessonId);
@@ -1379,7 +1526,10 @@ function beginTurn(index) {
       showPromptPhase();
     });
   } else {
-    showPromptPhase();
+    // カウントダウンOFFでも少しの溜めを入れる
+    setTimeout(function() {
+      showPromptPhase();
+    }, 200);
   }
 }
 
@@ -1443,7 +1593,22 @@ function reanimateEl(el) {
 // ============================================================
 function showPromptPhase() {
   setPhase('prompt');
-  document.getElementById('prompt-text').textContent = currentTurn.promptText;
+
+  // 読み上げ文の表示/非表示を設定に応じて切り替え
+  var promptTextEl = document.getElementById('prompt-text');
+  var promptHiddenEl = document.getElementById('prompt-hidden-mask');
+  var listenOnlyBadge = document.getElementById('listen-only-badge');
+
+  if (appSettings.showPromptText) {
+    promptTextEl.textContent = currentTurn.promptText;
+    promptTextEl.classList.remove('hidden');
+    promptHiddenEl.classList.add('hidden');
+    listenOnlyBadge.classList.add('hidden');
+  } else {
+    promptTextEl.classList.add('hidden');
+    promptHiddenEl.classList.remove('hidden');
+    listenOnlyBadge.classList.remove('hidden');
+  }
 
   if (appSettings.autoTTS) {
     speak(currentTurn.ttsText || currentTurn.promptText, function() {
@@ -1452,9 +1617,10 @@ function showPromptPhase() {
       }, 300);
     });
   } else {
+    // TTS OFF の場合: 2秒表示してから回答フェーズへ
     setTimeout(function() {
       enterAnswerPhase();
-    }, 1500);
+    }, 2000);
   }
 }
 
@@ -1464,7 +1630,12 @@ function showPromptPhase() {
 function enterAnswerPhase() {
   setPhase('answer');
   recognizedText = '';
-  document.getElementById('answer-prompt-text').textContent = currentTurn.promptText;
+  // 答え合わせ用に回答中も質問文を表示（薄く）
+  if (appSettings.showPromptText) {
+    document.getElementById('answer-prompt-text').textContent = currentTurn.promptText;
+  } else {
+    document.getElementById('answer-prompt-text').textContent = '';
+  }
   document.getElementById('recognized-text').textContent = '';
   document.getElementById('recognized-text').classList.add('hidden');
   document.getElementById('submit-btn').classList.add('hidden');
@@ -1641,17 +1812,48 @@ function stopRecordingIfActive() {
 
 // ============================================================
 // 音声読み上げ（TTS）
+// 修正ポイント:
+//   - speechSynthesis.cancel() の常時呼び出しを廃止
+//     （iOS Safariで次の発話をブロックする原因になるため）
+//   - 既に発話中の場合は短い待機後に再試行
+//   - onerrorで動作不能を検知
+//   - onstartでTTS動作確認フラグを立てる
 // ============================================================
 function speak(text, onEnd) {
   if (typeof speechSynthesis === 'undefined') {
+    console.warn('[TTS] speechSynthesis not available');
     if (onEnd) onEnd();
     return;
   }
-  speechSynthesis.cancel();
 
+  if (!text || text.trim() === '') {
+    if (onEnd) onEnd();
+    return;
+  }
+
+  // iOS対策: paused状態ならresume
+  if (speechSynthesis.paused) {
+    speechSynthesis.resume();
+  }
+
+  // 既に他の発話中なら、キャンセルせず少し待つ
+  if (speechSynthesis.speaking || speechSynthesis.pending) {
+    // 直近の発話が終わるのを短く待って再試行
+    setTimeout(function() {
+      speakInternal(text, onEnd);
+    }, 100);
+    return;
+  }
+
+  speakInternal(text, onEnd);
+}
+
+function speakInternal(text, onEnd) {
   var utter = new SpeechSynthesisUtterance(text);
   utter.lang = 'en-US';
   utter.rate = parseFloat(appSettings.ttsSpeed) || 0.9;
+  utter.volume = 1.0;
+  utter.pitch = 1.0;
 
   if (appSettings.voiceName) {
     var voices = speechSynthesis.getVoices();
@@ -1663,23 +1865,64 @@ function speak(text, onEnd) {
     }
   }
 
-  // Safari対策: onendフォールバック
+  // コールバック管理
   var callbackFired = false;
+  var fallbackTimer = null;
+
   var safeCallback = function() {
     if (callbackFired) return;
     callbackFired = true;
+    if (fallbackTimer) clearTimeout(fallbackTimer);
     if (onEnd) onEnd();
   };
 
-  var estimatedMs = Math.max(2500, text.length * 100);
-  var fallbackTimer = setTimeout(safeCallback, estimatedMs);
+  utter.onstart = function() {
+    lastTtsStartTime = Date.now();
+    ttsWorking = true;
+    updateTtsStatusBadge();
+    console.log('[TTS] speaking:', text);
+  };
 
   utter.onend = function() {
-    clearTimeout(fallbackTimer);
     safeCallback();
   };
 
-  speechSynthesis.speak(utter);
+  utter.onerror = function(event) {
+    console.warn('[TTS] error:', event.error);
+    // canceled は正常系（ユーザー操作等）なので状態を変えない
+    if (event.error !== 'canceled' && event.error !== 'interrupted') {
+      ttsWorking = false;
+      updateTtsStatusBadge();
+    }
+    safeCallback();
+  };
+
+  // フォールバック: テキスト長ベースの推定待機
+  // rateが遅いほど長く待つ
+  var estimatedMs = Math.max(2500, (text.length * 100) / (utter.rate || 1));
+  fallbackTimer = setTimeout(function() {
+    // まだ発話中なら少し延長を待つ
+    if (speechSynthesis.speaking) {
+      setTimeout(safeCallback, 1500);
+    } else {
+      // 指定時間経っても onstart が来なかった場合、TTS不動判定
+      if (ttsWorking === null && Date.now() - lastTtsStartTime > estimatedMs) {
+        console.warn('[TTS] Possibly silent - onstart never fired');
+        ttsWorking = false;
+        updateTtsStatusBadge();
+      }
+      safeCallback();
+    }
+  }, estimatedMs + 500);
+
+  try {
+    speechSynthesis.speak(utter);
+  } catch (e) {
+    console.warn('[TTS] speak() threw:', e);
+    ttsWorking = false;
+    updateTtsStatusBadge();
+    safeCallback();
+  }
 }
 
 function speakCorrectAnswer() {
@@ -1689,6 +1932,35 @@ function speakCorrectAnswer() {
       .replace(/\s+/g, ' ')
       .trim();
     speak(cleanText || currentTurn.ttsText);
+  }
+}
+
+/** 設定画面の「音声テスト」ボタン */
+function testTTS() {
+  unlockTts();
+  ttsWorking = null; // 再検証
+  updateTtsStatusBadge();
+  speak('Hello. This is a test of text to speech.', function() {
+    if (ttsWorking === true) {
+      showToast('音声テスト完了');
+    } else if (ttsWorking === false) {
+      showToast('音声が再生されませんでした。デバイスの音量とミュート設定を確認してください。');
+    }
+  });
+}
+
+function updateTtsStatusBadge() {
+  var badge = document.getElementById('tts-status');
+  if (!badge) return;
+  if (ttsWorking === true) {
+    badge.className = 'tts-status-badge ok';
+    badge.textContent = 'OK';
+  } else if (ttsWorking === false) {
+    badge.className = 'tts-status-badge ng';
+    badge.textContent = '無音の可能性';
+  } else {
+    badge.className = 'tts-status-badge unknown';
+    badge.textContent = '未検証';
   }
 }
 
@@ -1916,6 +2188,7 @@ function renderResultScreen() {
 }
 
 function replayLesson() {
+  unlockTts();
   if (currentLesson && currentLesson.lessonId !== 'review-session') {
     startLesson(currentLesson.lessonId);
   } else {
@@ -2036,6 +2309,15 @@ document.addEventListener('DOMContentLoaded', function() {
   loadLessons();
   loadSettingsUI();
   refreshHomeStats();
+
+  // 最初の任意のユーザー操作でTTSを解禁（iOS Safari対策の保険）
+  var unlockOnFirstTouch = function() {
+    unlockTts();
+    document.removeEventListener('touchstart', unlockOnFirstTouch);
+    document.removeEventListener('click', unlockOnFirstTouch);
+  };
+  document.addEventListener('touchstart', unlockOnFirstTouch, { once: true });
+  document.addEventListener('click', unlockOnFirstTouch, { once: true });
 });
 </script>
 
